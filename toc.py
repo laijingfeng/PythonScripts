@@ -1,40 +1,20 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-#####################################################
-# ghtoc   : a markdown toc generator
-# Author  : Kai Yuan <kent.yuan@gmail.com>
-# Usage   : toc.py <markdown file>
-# Date    : 2014-12-02
-# License :
-#Copyright (C) 2014 Kai Yuan
-#
-#Permission is hereby granted, free of charge, to any person obtaining
-#a copy of this software and associated documentation files (the "Software"),
-#to deal in the Software without restriction, including without limitation
-#the rights to use, copy, modify, merge, publish, distribute, sublicense,
-#and/or sell copies of the Software, and to permit persons to whom the
-#Software is furnished to do so, subject to the following conditions:
-#
-#The above copyright notice and this permission notice shall be included
-#in all copies or substantial portions of the Software.
-#
-#THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-#EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-#OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-#IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-#DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-#TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
-#OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-#####################################################
-
 import re
-import sys
+import os, os.path, sys
 import shutil,datetime
 
 top_level=77
 lnk_temp='%s- [%s](#%s)'
 TOC='#### Contents'
+
+def generate_toc_dir(dir_name):
+    for parent, dirnames, filenames in os.walk(dir_name):
+        for filename in filenames:
+            if filename.find('.md') != -1:
+                print 'file:' + parent + '\\' + filename
+                generate_toc(parent + '\\' + filename)
 
 def generate_toc(fname):
     global top_level
@@ -45,6 +25,9 @@ def generate_toc(fname):
     destf= '.'.join((fname,ts,'bak'))
     shutil.copy(fname, destf)
     print "Backup was created: [%s]"%destf
+
+    lines = pre_work(lines)
+    
     headers = [e.strip() for e in lines if re.match(r'#+', e)]
     #find top_level
     for i,h in enumerate(headers):
@@ -57,6 +40,39 @@ def generate_toc(fname):
         f.write('\n'.join(headers) + '\n\n')
         f.write(''.join(lines))
 
+def pre_work(lines):
+    # delete old Contents
+    
+    s_id, e_id, idx = -1, -1, 0
+    for e in lines:
+        if e.find(TOC) != -1:
+            s_id = idx
+            e_id = s_id
+        elif s_id != -1 and e.find('#') != -1:
+            e_id = idx
+        elif s_id != -1 and e.find('#') == -1:
+            break;
+        idx = idx + 1
+
+    if s_id != -1:
+        lines[s_id:e_id - s_id + 1] = []
+
+    # delete blank lines before article
+
+    blankLineCnt = 0
+    idx = 0
+    for e in lines:
+        if idx == blankLineCnt and e == '\n':
+            blankLineCnt = blankLineCnt + 1
+        else:
+            break
+        idx = idx + 1
+        
+    if blankLineCnt != 0:
+        lines[0:blankLineCnt] = []
+
+    return lines
+
 def tr_header(header):
     global lnk_temp
     lvl, txt = re.findall(r'^(\d+) (.*)', header)[0]
@@ -64,8 +80,9 @@ def tr_header(header):
 
 def usage():
     print '---------usage---------'
-    print 'python toc.py <markdown file>'
+    print 'python toc.py <markdown file name | dir name>'
     print 'Example: python toc.py README.md'
+    print 'Example: python toc.py lai'
     print '=========usage========='
 
 if __name__ == '__main__':
@@ -75,4 +92,7 @@ if __name__ == '__main__':
         exit()
     
     infile = sys.argv[1]
-    generate_toc(infile)
+    if infile.find('.md') != -1:
+        generate_toc(infile)
+    else:
+        generate_toc_dir(infile)
