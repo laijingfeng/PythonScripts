@@ -4,7 +4,7 @@
 import sys, os
 from logger import Logger
 
-logger = Logger(Logger.LOG_LEVEL_INFO)
+logger = Logger()
 
 class FindFile(object):
     def __init__(self, file_path):

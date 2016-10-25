@@ -10,7 +10,7 @@ class Logger(object):
     LOG_LEVEL_WARN  = 2
     LOG_LEVEL_INFO  = 1
 
-    def __init__(self, level, log_file = 'logger'):
+    def __init__(self, level = LOG_LEVEL_INFO, log_file = 'logger'):
         self.__level__ = level #最低打印等级
         self.__out_file__ = 1
         #文件名可以设置，方便多个模块的日志区分
