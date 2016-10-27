@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # encoding=utf-8
 
-import sys, os
+import sys, os, re
 from logger import Logger
 
 logger = Logger(Logger.LOG_LEVEL_INFO, 'find')
