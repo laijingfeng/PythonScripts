@@ -29,11 +29,11 @@ class Logger(object):
     foregroundColor = [0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f]
     backgroundColor = [0x00,0x10,0x20,0x30,0x40,0x50,0x60,0x70,0x80,0x90,0xa0,0xb0,0xc0,0xd0,0xe0,0xf0]
 
-    def __init__(self, level = LEVEL_INFO, file = 'logger'):
+    def __init__(self, level = LEVEL_INFO, file_name = 'logger'):
         self.__level__ = level #最低打印等级
         self.__out_file__ = 1
         #文件名可以设置，方便多个模块的日志区分
-        self.__file_name__ = file
+        self.__file_name__ = file_name
 
     def __set_cmd_color__(self, color):
         std_out_handle = ctypes.windll.kernel32.GetStdHandle(-11)
@@ -43,19 +43,15 @@ class Logger(object):
     def __set_cmd_default_color__(self):
         self.__set_cmd_color__(self.foregroundColor[self.COLOR_WHITE] | self.backgroundColor[self.COLOR_BLACK])
     
-    def ___(self, level, content, foreColor = COLOR_WHITE, backColor = COLOR_BLACK):
-
+    def __log__(self, level, content, foreColor = COLOR_WHITE, backColor = COLOR_BLACK):
+        
         self.__set_cmd_color__(self.foregroundColor[foreColor] | self.backgroundColor[backColor])
         print '{}|{}|{}'.format(datetime.now().strftime('%Y-%m-%d %I:%M:%S'), level, content)
         self.__set_cmd_default_color__()
         
         if self.__out_file__ == 1:
-            saveout = sys.stdout
-            fsock = open(self.__file_name__ + '.log', 'a')
-            sys.stdout = fsock
-            print '{}|{}|{}'.format(datetime.now().strftime('%Y-%m-%d %I:%M:%S'), level, content)
-            sys.stdout = saveout
-            fsock.close()
+            with open('{}.log'.format(self.__file_name__),'a') as f:
+                f.write('{}|{}|{}\n'.format(datetime.now().strftime('%Y-%m-%d %I:%M:%S'), level, content))
 
     def set_level(self, level):
         self.__level__ = level
@@ -67,12 +63,12 @@ class Logger(object):
 
     def info(self, content, foreColor = COLOR_WHITE, backColor = COLOR_BLACK):
         if self.__level__ <= self.LEVEL_INFO:
-            self.___('INFO', content, foreColor, backColor)
+            self.__log__('INFO', content, foreColor, backColor)
 
     def warn(self, content, foreColor = COLOR_YELLOW, backColor = COLOR_BLACK):
         if self.__level__ <= self.LEVEL_WARN:
-            self.___('WARN', content, foreColor, backColor)
+            self.__log__('WARN', content, foreColor, backColor)
 
     def error(self, content, foreColor = COLOR_RED, backColor = COLOR_BLACK):
         if self.__level__ <= self.LEVEL_ERROR:
-            self.___('ERROR', content, foreColor, backColor)
+            self.__log__('ERROR', content, foreColor, backColor)
