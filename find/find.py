@@ -2,9 +2,10 @@
 # encoding=utf-8
 
 import sys, os, re
+sys.path.append('..')
 from logger import Logger
 
-logger = Logger(Logger.LOG_LEVEL_INFO, 'find')
+logger = Logger(Logger.LEVEL_INFO, 'do_find')
 find_path = '.'#'c:\\Users\\1\\AppData\\Local\\YNote\\Data\\xxx'
 
 class FindFile(object):
@@ -86,6 +87,7 @@ if __name__ == '__main__':
             finds = finds + w
         else:
             finds = finds + '.' + w
+            
     logger.info('find:' + finds)
 
     find_files = []
