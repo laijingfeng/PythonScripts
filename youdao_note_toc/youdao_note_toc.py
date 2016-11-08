@@ -1,10 +1,12 @@
 #!/usr/bin/python
 # encoding=utf-8
 
-import sys, os
+import sys, os, shutil, datetime
 sys.path.append('..')
 from logger import Logger
 
+new_to_ok = True
+ok_file_name = 'toc_ok.md'
 logger = Logger(Logger.LEVEL_INFO, 'note_toc')
 
 def findFiles(path = '.'):
@@ -13,7 +15,7 @@ def findFiles(path = '.'):
         file_path = path + '\\' + line
         if os.path.isdir(file_path):
             continue
-        if line.find('.md') != -1 and line != 'ok.md':
+        if line.find('.md') != -1 and line != ok_file_name and line.find('.bak') == -1:
             doFile(file_path)
             
 def doFile(file_path):
@@ -47,7 +49,15 @@ def doFile(file_path):
             if d.find(last_line) != 0:
                 ndata.append(d)
             last_line = 'aaaaaeeee'
-    with open('ok.md', 'w') as f:
+
+    new_file = ok_file_name
+    if new_to_ok == False:
+        ts = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+        destf= '.'.join((file_path,ts,'bak'))
+        shutil.copy(file_path, destf)
+        new_file = file_path
+    
+    with open(new_file, 'w') as f:
         for d in ndata:
             f.write(d + '\n')
 
