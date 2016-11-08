@@ -3,7 +3,7 @@
 
 import re
 import os, os.path, sys
-import shutil,datetime
+import shutil, datetime
 
 top_level=77
 lnk_temp='%s- [%s](#%s)'
