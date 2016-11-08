@@ -60,6 +60,8 @@ class Logger(object):
         if os.path.exists(self.__file_name__ + '.log'):
             shutil.copy(self.__file_name__ + '.log', self.__file_name__ + '-prev.log')
             os.remove(self.__file_name__ + '.log')
+            self.__log__('SYS', 'reset log')
+            # 增加一句系统LOG，避免LOG为空，监听文件没了，同时也好看有响应
 
     def info(self, content, foreColor = COLOR_WHITE, backColor = COLOR_BLACK):
         if self.__level__ <= self.LEVEL_INFO:
