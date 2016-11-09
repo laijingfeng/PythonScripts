@@ -47,10 +47,10 @@ def ParseArg(argv):
     return False, None
 
 def Usage():
-    print '------usage------'
-    print 'find.py text_want_to_find'
-    print 'find.py with find_text.txt'
-    #print 'find_xxx.py'
+    logger.info('------usage------')
+    logger.info('find.py text_want_to_find')
+    logger.info('find.py with find_text.txt')
+    #logger.info(find_xxx.py')
 
 def MatchLine(line, words_want_to_find):
     cnt = 0
@@ -71,6 +71,7 @@ if __name__ == '__main__':
     
     success, args = ParseArg(sys.argv)
     if not success:
+        Usage()
         exit(-1)
 
     logger.reset()

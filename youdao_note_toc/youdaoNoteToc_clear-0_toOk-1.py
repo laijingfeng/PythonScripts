@@ -6,6 +6,7 @@ sys.path.append('..')
 from logger import Logger
 
 new_to_ok = True
+clear_toc = False
 ok_file_name = 'toc_ok.md'
 logger = Logger(Logger.LEVEL_INFO, 'note_toc')
 
@@ -43,8 +44,12 @@ def doFile(file_path):
                     last_line = real_title[old_idx:]
                 else:
                     last_line = 'aaaaaeeee'
-                ndata.append(finds[fs_idx] + real_title + '[^' + real_title + ']')
-                ndata.append('[^' + real_title + ']: ' + finds2[fs_idx] + real_title)
+                    
+                if clear_toc == True:
+                    ndata.append(finds[fs_idx] + real_title)
+                else:
+                    ndata.append(finds[fs_idx] + real_title + '[^' + real_title + ']')
+                    ndata.append('[^' + real_title + ']: ' + finds2[fs_idx] + real_title)
                 continue
             if d.find(last_line) != 0:
                 ndata.append(d)
@@ -60,12 +65,45 @@ def doFile(file_path):
     with open(new_file, 'w') as f:
         for d in ndata:
             f.write(d + '\n')
+            
+def ParseArg(argv):
+    global new_to_ok
+    global clear_toc
+    new_to_ok = True
+    clear_toc = False
+        
+    if len(argv) == 1:
+        file_name = argv[0]
+        file_name = os.path.split(file_name)[1]
+        file_name = file_name.split('.')[0]
+        file_name = file_name.split('_',1)[1]
+        
+        pars = file_name.split('_')
+        for p in pars:
+            ps = p.split('-')
+            if len(ps) == 2:
+                if ps[0] == 'clear':
+                    if ps[1] == '0':
+                        clear_toc = False
+                    elif ps[1] == '1':
+                        clear_toc = True
+                elif ps[0] == 'toOK':
+                    if ps[1] == '0':
+                        new_to_ok = False
+                    elif ps[1] == '1':
+                        new_to_ok = True
 
 if __name__ == '__main__':
 
     reload(sys)
     sys.setdefaultencoding('utf-8')
+
     logger.reset()
+    
+    ParseArg(sys.argv)
+
+    logger.info('clear_toc=' + str(clear_toc) + ' new_to_ok=' + str(new_to_ok))
+    
     findFiles()
     
 
