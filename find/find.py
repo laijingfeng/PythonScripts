@@ -76,9 +76,14 @@ if __name__ == '__main__':
         for filename in filenames:
             if filename.find('.md') != -1:
                 file_path = parent + '\\' + filename
-                
                 find_file = FindFile(parent, filename)
 
+                #标题
+                cnt = MatchLine(filename, words_want_to_find)
+                if cnt > 0:
+                    find_file.add_find(0, filename, cnt)
+                    
+                #内容
                 line_idx = 1
                 with open(file_path, 'r') as f:
                     lines = f.readlines()
