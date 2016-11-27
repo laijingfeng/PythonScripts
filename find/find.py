@@ -35,30 +35,21 @@ def ParseArg(argv):
     if len(argv) == 2:
         return True, [argv[1]]
     elif len(argv) == 1:
-        with open('find_text.txt', 'r') as f:
-            lines = f.readlines()
-            if len(lines) > 0:
-                return True, [lines[0].strip()]
-        #file_name = argv[0]
-        #file_name = os.path.split(file_name)[1]
-        #file_name = file_name.split('.')[0]
-        #if file_name.find('_') != -1:
-            #return True, [file_name.split('_')[1]]
+        file_name = argv[0]
+        file_name = os.path.split(file_name)[1]
+        file_name = file_name.split('.')[0]
+        if file_name.find('_') != -1:
+            return True, [file_name.split('_', 1)[1]]
     return False, None
 
 def Usage():
     logger.info('------usage------')
-    logger.info('find.py text_want_to_find')
-    logger.info('find.py with find_text.txt')
-    #logger.info(find_xxx.py')
+    logger.info('find.py xx1_xx2')
+    logger.info('find_xx1_xx2.py')
 
 def MatchLine(line, words_want_to_find):
     cnt = 0
-    idx = -1
     for w in words_want_to_find:
-	idx = idx + 1
-	if idx == 0 or idx == len(words_want_to_find) - 1:
-	    continue
 	m = re.search(w, line, re.IGNORECASE)
 	if bool(m) == True or line.find(w) != -1:
 	    cnt = cnt + 1
@@ -75,22 +66,10 @@ if __name__ == '__main__':
         exit(-1)
 
     logger.reset()
-
-    text_want_to_find = unicode(args[0],'utf-8')
+    
+    text_want_to_find = args[0].decode('gb2312').encode('utf8')
     words_want_to_find = text_want_to_find.split('_')
-    w_idx = -1
-    finds = ''
-    for w in words_want_to_find:
-        w_idx = w_idx + 1
-        if w_idx == 0 or w_idx == len(words_want_to_find) - 1:
-            continue
-        if finds == '':
-            finds = finds + w
-        else:
-            finds = finds + '.' + w
-            
-    logger.info('find:' + finds)
-
+    
     find_files = []
     
     for parent, dirnames, filenames in os.walk(find_path):
@@ -100,10 +79,6 @@ if __name__ == '__main__':
                 
                 find_file = FindFile(parent, filename)
 
-                #cnt = MatchLine(filename, words_want_to_find)
-                #if cnt > 0:
-                #    find_file.add_find(0, filename, cnt)
-                    
                 line_idx = 1
                 with open(file_path, 'r') as f:
                     lines = f.readlines()
