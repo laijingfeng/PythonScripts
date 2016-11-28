@@ -69,7 +69,8 @@ if __name__ == '__main__':
     
     text_want_to_find = args[0].decode('gb2312').encode('utf8')
     words_want_to_find = text_want_to_find.split('_')
-    
+
+    logger.info('find:' + text_want_to_find)
     find_files = []
     
     for parent, dirnames, filenames in os.walk(find_path):
