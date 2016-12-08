@@ -22,8 +22,8 @@ def findFiles(path = '.'):
 def doFile(file_path):
     logger.info('do:' + file_path)
     ndata = []
-    finds = ['### ','## ','# ']
-    finds2 = ['--------','----','']
+    finds = ['#### ','### ','## ','# ']
+    finds2 = ['------------','--------','----','']
     last_line = 'aaaaaeeee'
     with open(file_path, 'r') as f:
         data = f.readlines()
@@ -94,16 +94,9 @@ def ParseArg(argv):
                         new_to_ok = True
 
 if __name__ == '__main__':
-
     reload(sys)
     sys.setdefaultencoding('utf-8')
-
     logger.reset()
-    
     ParseArg(sys.argv)
-
     logger.info('clear_toc=' + str(clear_toc) + ' new_to_ok=' + str(new_to_ok))
-    
     findFiles()
-    
-
