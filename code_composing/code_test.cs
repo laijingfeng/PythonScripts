@@ -1,48 +1,14 @@
-Shader "HELLOHUAN/Hello_Sequence" {
-    Properties {
-        _Color ("Main Color", Color) = (1,1,1,1)
-        _MainTex ("Base (RGB) Trans (A)", 2D) = "white" {}
-        _SizeX ("列数", Float) = 4
-        _SizeY ("行数", Float) = 4
-        _Speed ("播放速度", Float) = 200
-    }
+package Common;
 
-    SubShader {
-        Tags { "RenderType"="Opaque"}
-        LOD 200
+enum EnumTest
+{
+    ENUM_TEST_INVALID    = 0;
+    ENUM_TEST_A            = 1;
+    ENUM_TEST_B            = 2;
+}
 
-        CGPROGRAM
-        #pragma surface surf Lambert alpha
-
-        sampler2D _MainTex;
-        fixed4 _Color;
-
-        uniform fixed _SizeX;
-        uniform fixed _SizeY;
-        uniform fixed _Speed;
-
-        struct Input {
-            float2 uv_MainTex;
-        };
-
-        void surf (Input IN, inout SurfaceOutput o) {
-
-            int index = floor(_Time .x * _Speed);
-            int indexY = index/_SizeX;
-            int indexX = index - indexY*_SizeX;
-            float2 testUV = float2(IN.uv_MainTex.x /_SizeX, IN.uv_MainTex.y /_SizeY);
-
-            testUV.x += indexX/_SizeX;
-            testUV.y += indexY/_SizeY;
-
-            fixed4 c = tex2D(_MainTex, testUV) * _Color;
-            o.Albedo = c.rgb;
-
-            o.Alpha = c.a;
-            //o.Albedo = float3( floor(_Time .x * _Speed) , 1.0, 1.0);
-        }
-        ENDCG
-    }
-
-    Fallback "Transparent/VertexLit"
+message StructTest
+{
+    optional EnumTest type    = 1 [default = ENUM_TEST_INVALID];
+    optional float    val    = 2;
 }
