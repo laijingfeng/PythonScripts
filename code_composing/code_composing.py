@@ -7,6 +7,10 @@
 # 默认设定的是处理当前目录的cs文件
 
 import sys, os
+sys.path.append('..')
+from logger import Logger
+
+logger = Logger(Logger.LEVEL_INFO, 'code_composing')
 
 def findFiles(path = '.'):
     list = os.listdir(path)
@@ -25,6 +29,9 @@ def doFile(file_path):
     #回退到空行tab数不对
 
     delete_empty_line = False #是否删除空行
+
+    if os.path.exists(file_path) == False:
+        return
     
     ndata = []
     brackets_cnt = 0
@@ -60,8 +67,31 @@ def doFile(file_path):
         for d in ndata:
             f.write(d + '\n')
 
+def ParseArg(argv):
+    if len(argv) == 2:
+        return True, [argv[1]]
+    elif len(argv) == 1:
+        return True, ['']
+    return False, None
+
+def Usage():
+    logger.info('------usage------')
+    logger.info('`code_composing.py` for cs files in current folder')
+    logger.info('`code_composing.py xx.xx` for file xx.xx')
+    
 if __name__ == '__main__':
     reload(sys)
     sys.setdefaultencoding('utf-8')
 
-    findFiles()
+    success, args = ParseArg(sys.argv)
+    if not success:
+        Usage()
+        exit(-1)
+
+    find_file = args[0]
+    if find_file == '':
+        logger.info('work current folder')
+        findFiles()
+    else:
+        logger.info('work file ' + find_file)
+        doFile(find_file)
