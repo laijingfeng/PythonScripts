@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # encoding=utf-8
+#version: 2017-04-19-00
 
 # 说明：代码格式化
 # 根据花括号填充tab(tab用4个空格)，删除多余的空格类字符
