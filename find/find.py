@@ -45,7 +45,6 @@ def ParseArg(argv):
 def Usage():
     logger.info('------usage------')
     logger.info('`find.py xx1_xx2` give par')
-    logger.info('`find.py xx.xx` read par from file')
     logger.info('`find_xx1_xx2.py` read par from name')
 
 def MatchLine(line, words_want_to_find):
@@ -68,15 +67,7 @@ if __name__ == '__main__':
 
     logger.reset()
 
-    want_pre = args[0]
-    if os.path.exists(want_pre) == True:
-        text_want_to_find = ''
-        with open(want_pre, 'r') as f:
-            data = f.readlines()
-            if(len(data) > 0):
-                text_want_to_find = data[0].strip()
-    else:
-        text_want_to_find = want_pre.decode('gb2312').encode('utf8')
+    text_want_to_find = args[0].decode('gb2312').encode('utf8')
     words_want_to_find = text_want_to_find.split('_')
 
     logger.info('find:' + text_want_to_find)
