@@ -11,6 +11,15 @@ def Replace(text):
             text = text.replace(key, replaceDic[key])
     return text
 
+def DoReplace(path):
+    if not os.path.exists(path):
+        return
+    for parent, dirnames, filenames in os.walk(path):
+        for filename in filenames:
+            newname = Replace(filename)
+            if filename != newname:
+                os.rename(os.path.join(parent, filename), os.path.join(parent, newname))
+
 def Usage():
     print 'this is Usage()'
 
@@ -29,9 +38,6 @@ if __name__ == '__main__':
                 if len(pars) == 2:
                     replaceDic[pars[0]] = pars[1]
 
-    for parent, dirnames, filenames in os.walk('./files/'):
-        for filename in filenames:
-            newname = Replace(filename)
-            if filename != newname:
-                os.rename(os.path.join(parent, filename), os.path.join(parent, newname))
+    DoReplace('./files/')
+    
                 
