@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # encoding=utf-8
-# version: 2016-12-25 19:56:54
+# version: 2017-07-14 13:15:29
 
 import sys, os, ctypes, shutil
 from datetime import datetime
@@ -47,12 +47,12 @@ class Logger(object):
     def __log__(self, level, content, foreColor = COLOR_WHITE, backColor = COLOR_BLACK):
         
         self.__set_cmd_color__(self.foregroundColor[foreColor] | self.backgroundColor[backColor])
-        print '{}|{}|{}'.format(datetime.now().strftime('%Y-%m-%d %I:%M:%S'), level, content)
+        print '{}|{}|{}'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), level, content)
         self.__set_cmd_default_color__()
         
         if self.__out_file__ == 1:
             with open('{}.log'.format(self.__file_name__),'a') as f:
-                f.write('{}|{}|{}\n'.format(datetime.now().strftime('%Y-%m-%d %I:%M:%S'), level, content))
+                f.write('{}|{}|{}\n'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), level, content))
 
     def set_level(self, level):
         self.__level__ = level
