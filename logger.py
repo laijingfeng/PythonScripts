@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # encoding=utf-8
-# version: 2017-07-14 13:15:29
+# version: 2017-07-14 14:38:29
 
 import sys, os, ctypes, shutil
 from datetime import datetime
@@ -31,10 +31,7 @@ class Logger(object):
     backgroundColor = [0x00,0x10,0x20,0x30,0x40,0x50,0x60,0x70,0x80,0x90,0xa0,0xb0,0xc0,0xd0,0xe0,0xf0]
 
     def __init__(self, level = LEVEL_INFO, file_name = 'logger'):
-        self.__level__ = level #最低打印等级
-        self.__out_file__ = 1
-        #文件名可以设置，方便多个模块的日志区分
-        self.__file_name__ = file_name
+        self.set_config(level, file_name)
 
     def __set_cmd_color__(self, color):
         std_out_handle = ctypes.windll.kernel32.GetStdHandle(-11)
@@ -51,16 +48,19 @@ class Logger(object):
         self.__set_cmd_default_color__()
         
         if self.__out_file__ == 1:
-            with open('{}.log'.format(self.__file_name__),'a') as f:
+            with open('{}.log'.format(self.__file_path__), 'a') as f:
                 f.write('{}|{}|{}\n'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), level, content))
 
-    def set_level(self, level):
-        self.__level__ = level
+    def set_config(self, level = LEVEL_INFO, file_path = 'logger'):
+        self.__level__ = level #最低打印等级
+        self.__out_file__ = 1
+        #文件名可以设置，方便多个模块的日志区分
+        self.__file_path__ = file_path
 
     def reset(self):
-        if os.path.exists(self.__file_name__ + '.log'):
-            shutil.copy(self.__file_name__ + '.log', self.__file_name__ + '-prev.log')
-            os.remove(self.__file_name__ + '.log')
+        if os.path.exists(self.__file_path__ + '.log'):
+            shutil.copy(self.__file_path__ + '.log', self.__file_path__ + '-prev.log')
+            os.remove(self.__file_path__ + '.log')
         self.__log__('SYS', 'reset log')
         # 增加一句系统LOG，避免LOG为空，监听文件没了，同时也好看有响应
 
