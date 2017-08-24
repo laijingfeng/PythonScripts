@@ -4,17 +4,19 @@
 
 import sys
 
-def ParseArg(argv):
+
+def parse_arg(argv):
     if len(argv) < 1:
         return False, None
     return True, argv
 
-def Usage():
-    print 'this is Usage()'
+
+def usage():
+    print 'this is usage()'
 
 if __name__ == '__main__':
-    success, args = ParseArg(sys.argv)
+    success, args = parse_arg(sys.argv)
     if not success:
-        Usage()
+        usage()
         exit(-1)
     print 'start'
