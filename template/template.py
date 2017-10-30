@@ -1,11 +1,12 @@
 #!/usr/bin/python
 # encoding=utf-8
-# version: 2017-10-11 00:28:39
+# version: 2017-10-30 11:31:05
 
 import sys
 import os
 
-enter_cwd_path = ''
+enter_cwd_dir = ''
+python_file_dir = ''
 
 
 def parse_arg(argv):
@@ -15,8 +16,9 @@ def parse_arg(argv):
 
 
 def get_exe_path(simple_path):
-    global enter_cwd_path
-    return os.path.join(enter_cwd_path, os.path.dirname(sys.argv[0]), simple_path)
+    global enter_cwd_dir
+    global python_file_dir
+    return os.path.join(enter_cwd_dir, python_file_dir, simple_path)
 
 
 def usage():
@@ -27,7 +29,8 @@ if __name__ == '__main__':
     if not success:
         usage()
         exit(-1)
-    enter_cwd_path = os.getcwd()
+    enter_cwd_dir = os.getcwd()
+    python_file_dir = os.path.dirname(sys.argv[0])
 
     print 'start'
     print sys.argv[0], os.getcwd()
