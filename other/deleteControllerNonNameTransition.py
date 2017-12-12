@@ -10,7 +10,7 @@ python_file_dir = ''
 
 
 def parse_arg(argv):
-    if len(argv) != 2:
+    if len(argv) != 1:
         return False, None
     return True, argv
 
@@ -23,19 +23,10 @@ def get_exe_path(simple_path):
 
 def usage():
     print 'this is usage()'
-    print 'deleteControllerNonNameTransition.py filename.controller'
 
-if __name__ == '__main__':
-    success, args = parse_arg(sys.argv)
-    if not success:
-        usage()
-        exit(-1)
-    enter_cwd_dir = os.getcwd()
-    python_file_dir = os.path.dirname(sys.argv[0])
 
-    file_path = get_exe_path(args[1])
+def handle_file(file_path):
     file_content = []
-
     with open(file_path, 'r') as f:
         file_content = f.readlines()
 
@@ -60,3 +51,17 @@ if __name__ == '__main__':
             if w.strip() == 'm_Name: XXX':
                 w = '  m_Name: '
             f.write(w.rstrip() + chr(0x0A))
+
+if __name__ == '__main__':
+    success, args = parse_arg(sys.argv)
+    if not success:
+        usage()
+        exit(-1)
+    enter_cwd_dir = os.getcwd()
+    python_file_dir = os.path.dirname(sys.argv[0])
+
+    files = []
+    file_list = os.listdir(get_exe_path('./'))
+    for file_name in file_list:
+        if file_name.endswith('.controller'):
+            handle_file(get_exe_path(os.path.join('./', file_name)))
