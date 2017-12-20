@@ -15,7 +15,7 @@ import autopy
 import Image
 import ImageGrab
 
-L, T = 234, 210  # left-top position
+L, T = 51, 210  # left-top position
 EXIT = False  # had exit
 
 
@@ -180,19 +180,27 @@ def run():
     custom = Custom()
     while True:
         if judge_next() is False:
-            for i in xrange(4):  # 4个顾客
+            for i in xrange(4):  # 遍历4个顾客
                 if EXIT:
                     sys.exit()
-                m = custom.order(i)
-                if m is not None:
-                    if m < 8:
-                        custom.serve1(i, m)
+                eat_first = True 
+                while True:  # 后期可能1个顾客连着吃好几个 
+                    if EXIT:
+                        sys.exit()
+                    if eat_first is False:
+                        time.sleep(0.2)
+                    m = custom.order(i)          
+                    if m is not None:
+                        eat_first = False
+                        if m < 8:
+                            custom.serve1(i, m)
+                        else:
+                            custom.serve2(i, m)
+                        print '{} eat {}'.format(i, m)
                     else:
-                        custom.serve2(i, m)
-                    print '{} eat {}'.format(i, m)
-                else:
-                    print '{} no custom'.format(i)
-        time.sleep(1)
+                        break
+                        # print '{} no custom'.format(i)
+        time.sleep(0.5)
 
 
 if __name__ == "__main__":
