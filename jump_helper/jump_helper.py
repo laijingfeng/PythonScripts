@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # encoding=utf-8
-# version: 2017-12-29 21:03:22
+# version: 2017-12-30 10:46:46
 
 import time
 import sys
@@ -14,9 +14,11 @@ import threading
 import pyHook
 import pythoncom
 
+
 start_pos = (0, 0)
 end_pos = (0, 0)
 config = 390
+boy_height = 10
 
 
 # cmd win on the top
@@ -58,17 +60,31 @@ def one_step():
     global start_pos
     global end_pos
     global config
+    global boy_height
 
     x = math.fabs(start_pos[0] - end_pos[0])
-    y = math.fabs(start_pos[1] - end_pos[1])
+    y = math.fabs(start_pos[1] + boy_height - end_pos[1])
     z = math.sqrt(x * x + y * y) / config
     autopy.mouse.toggle(True)
     time.sleep(z)
     autopy.mouse.toggle(False)
 
 
+def img_val(img, l, t, r, b):
+    ret = 0
+    for x in range(l, r):
+        for y in range(t, b):
+            pix = img.getpixel((x, y))
+            for z in range(3):
+                ret += pix[z]
+    return ret
+
+
 if __name__ == "__main__":
     with open('config.txt', 'r') as f:
         read_data = f.readlines()
         config = float(read_data[0])
+        boy_height = float(read_data[1])
     run()
+
+
