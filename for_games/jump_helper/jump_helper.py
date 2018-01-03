@@ -1,27 +1,32 @@
 #!/usr/bin/python
 # encoding=utf-8
-# version: 2017-12-30 10:46:46
+# version: 2018-01-03 20:31:37
 
 import time
 import sys
-import ctypes
-import win32con
-import ctypes.wintypes
 import win32gui
+import win32con
+import os
 import autopy
 import math
-import threading
 import pyHook
 import pythoncom
+import json
 
-
+enter_cwd_dir = ''
+python_file_dir = ''
 start_pos = (0, 0)
 end_pos = (0, 0)
-config = 390
-boy_height = 10
+press_factor = 390
+player_height = 10
 
 
-# cmd win on the top
+def get_exe_path(simple_path):
+    global enter_cwd_dir
+    global python_file_dir
+    return os.path.join(enter_cwd_dir, python_file_dir, simple_path)
+
+
 def topmost_me():
     hwnd = win32gui.GetForegroundWindow()
     (left, top, right, bottom) = win32gui.GetWindowRect(hwnd)
@@ -59,32 +64,25 @@ def run():
 def one_step():
     global start_pos
     global end_pos
-    global config
-    global boy_height
+    global press_factor
+    global player_height
 
     x = math.fabs(start_pos[0] - end_pos[0])
-    y = math.fabs(start_pos[1] + boy_height - end_pos[1])
-    z = math.sqrt(x * x + y * y) / config
+    y = math.fabs(start_pos[1] + player_height - end_pos[1])
+    z = math.sqrt(x * x + y * y) / press_factor
     autopy.mouse.toggle(True)
     time.sleep(z)
     autopy.mouse.toggle(False)
 
 
-def img_val(img, l, t, r, b):
-    ret = 0
-    for x in range(l, r):
-        for y in range(t, b):
-            pix = img.getpixel((x, y))
-            for z in range(3):
-                ret += pix[z]
-    return ret
-
-
 if __name__ == "__main__":
-    with open('config.txt', 'r') as f:
-        read_data = f.readlines()
-        config = float(read_data[0])
-        boy_height = float(read_data[1])
+    enter_cwd_dir = os.getcwd()
+    python_file_dir = os.path.dirname(sys.argv[0])
+
+    with open(get_exe_path('./config.json'), 'r') as f:
+        config = json.load(f)
+        press_factor = config['press_factor']
+        player_height = config['player_height']
     run()
 
 
