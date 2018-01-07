@@ -1,15 +1,15 @@
 #!/usr/bin/python
 # encoding=utf-8
-# version: 2017-12-31 17:52:35
+# version: 2018-01-07 23:18:56
 
 import sys
 import os
 import json
+import time
+import zmq
 
 enter_cwd_dir = ''
 python_file_dir = ''
-test_name = ''
-test_age = ''
 
 def parse_arg(argv):
     if len(argv) < 1:
@@ -34,12 +34,12 @@ if __name__ == '__main__':
     enter_cwd_dir = os.getcwd()
     python_file_dir = os.path.dirname(sys.argv[0])
 
-    print 'start'
-    print sys.argv[0], os.getcwd()
+    context = zmq.Context()
+    socket = context.socket(zmq.REP)
+    socket.bind("tcp://*:5555")
 
-    with open(get_exe_path('./config.json'), 'r') as f:
-        config = json.load(f)
-        test_name = config['test_name']
-        test_age = config['test_age']
-
-    print test_name, test_age
+    while True:
+        message = socket.recv()
+        print message
+        dic = {"type":"server_rsp", "from":"lai", "time":time.time()}
+        socket.send(json.dumps(dic))

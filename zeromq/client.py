@@ -5,11 +5,11 @@
 import sys
 import os
 import json
+import time
+import zmq
 
 enter_cwd_dir = ''
 python_file_dir = ''
-test_name = ''
-test_age = ''
 
 def parse_arg(argv):
     if len(argv) < 1:
@@ -34,12 +34,15 @@ if __name__ == '__main__':
     enter_cwd_dir = os.getcwd()
     python_file_dir = os.path.dirname(sys.argv[0])
 
-    print 'start'
-    print sys.argv[0], os.getcwd()
+    context = zmq.Context()
+    socket = context.socket(zmq.REQ)
+    socket.connect("tcp://localhost:5555")
 
-    with open(get_exe_path('./config.json'), 'r') as f:
-        config = json.load(f)
-        test_name = config['test_name']
-        test_age = config['test_age']
-
-    print test_name, test_age
+    while True:
+        data = raw_input("input your data")
+        if data == 'q':
+            sys.exit()
+        dic = {"type":"client_req", "msg":data}
+        socket.send(json.dumps(dic))
+        response = socket.recv()
+        print response
