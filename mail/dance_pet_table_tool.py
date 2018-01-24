@@ -1,14 +1,10 @@
 #!/usr/bin/python
 #-*-coding:utf-8-*-
-# version: 2018-01-22 14:48:44
-"""get mail"""
+# version: 2018-01-24 15:14:54
+"""dance pet tool"""
 
 import sys
 import os
-import imaplib
-import email
-import threading
-import time
 import codecs
 import json
 from collections import OrderedDict
@@ -41,43 +37,7 @@ class MainClass(object):
         self.enter_cwd_dir = os.getcwd()
         self.python_file_dir = os.path.dirname(sys.argv[0])
         self.work()
-    def get_mail(self):
-        """get mail return whether has new mail"""
-        ret = False
-        mail_host = 'imap.exmail.qq.com'
-        mail_user = 'laijf@myjooy.com'
-        mail_pass = 'Lai123'
-        server = imaplib.IMAP4_SSL(mail_host, 993)
-        server.login(mail_user, mail_pass)
-        server.select()
-        res, data = server.search(None, 'unseen')
-        if res == 'OK' and data[0] != '':
-            print 'have new mail'
-            mail_id = data[0].split()[0]
-            msg_content = server.fetch(mail_id, '(RFC822)')
-            msg = email.message_from_string(msg_content[1][0][1])
-            ret = self.parse_mail(msg)
-            server.store(mail_id, '+FLAGS', '\\seen')
-        else:
-            print 'query error or no new mail'
-        return ret
-    def parse_mail(self, msg):
-        """parse mail"""
-        ret = False
-        for part in msg.walk():
-            if not part.is_multipart():
-                file_name = part.get_filename()
-                if file_name:
-                    data = part.get_payload(decode=True)
-                    self.save_file(data, './', file_name)
-                    ret = True
-        return ret
-    def save_file(self, data, path, filename):
-        """save file"""
-        file_path = path + filename
-        with open(file_path, 'wb') as file_handler:
-            file_handler.write(data)
-    def upload_to_ftp(self):
+    def upload_to_ftp(self, upload_type):
         """upload files to ftp"""
         host = '106.15.181.140'
         username = 'test1'
@@ -88,27 +48,23 @@ class MainClass(object):
         f.connect(host, 21, 25)
         f.login(username, password)
         path_is_right = False
-
         try:
-            f.cwd('gawumengchong3d/test/')
+            f.cwd('gawumengchong3d/test/res/' + upload_type)
             path_is_right = True
         except Exception as error:
             print error.message
             path_is_right = False
         if path_is_right is False:
-            print 'path is error'
+            print '[error]: ftp error {}'.format(upload_type)
             f.quit()
             return False
-
-        pwd_path = f.pwd()
-        print pwd_path
         files = os.listdir('./')
         for filename in files:
             if os.path.isfile(filename) and (filename.startswith('~') is False):
-                if filename.endswith('.txt'):
+                if (upload_type == 'tables' and filename.endswith('.json')) or (upload_type == 'sound' and filename.endswith('.mp3')):
                     fp = open(filename, 'rb')
-                    print filename
                     f.storbinary('STOR ' + filename, fp, 1024 * 1024)
+                    print '[info]: upload file : {}'.format(filename)
                     fp.close()
         f.quit()
         return True
@@ -117,10 +73,11 @@ class MainClass(object):
         files = os.listdir('./')
         for filename in files:
             if os.path.isfile(filename) and (filename.startswith('~') is False):
-                if filename.endswith('.xlsx') or filename.endswith('.json'):
+                if filename.endswith('.json'):
                     os.remove(filename)
     def excel_to_json(self):
         """excel to json return whether success"""
+        ret = False
         files = os.listdir('./')
         for filename in files:
             if os.path.isfile(filename) and filename.endswith('.xlsx') and (filename.startswith('~') is False):
@@ -143,30 +100,24 @@ class MainClass(object):
                 j = json.dumps(convert_list)
                 with codecs.open(filename.replace('.xlsx', '.json'), 'w', 'utf-8') as file_handler:
                     file_handler.write(j)
+                ret = True
+        if ret is False:
+            print "[info]: no table need handle"
+        else:
+            print "[info]: table ok"
+        return ret
     def any_key_exit(self):
         """any key to exit"""
         os.system('pause')
     def work(self):
         """do real work"""
-        #self.upload_to_ftp()
-        self.any_key_exit()
-        return
-        if self.get_mail() is True:
-            self.excel_to_json()
-            self.upload_to_ftp()
+        if self.excel_to_json() is True:
+            self.upload_to_ftp('tables')
             self.clean()
-
-class MyThread(threading.Thread):
-    """my thread"""
-    def run(self):
-        get_mail = MainClass()
-        while True:
-            get_mail.run()
-            time.sleep(5)
+        self.upload_to_ftp('sound')
+        print "===Tool Work Finish==="
+        self.any_key_exit()
 
 if __name__ == '__main__':
-    #GET_MAIL_THREAD = MyThread()
-    #GET_MAIL_THREAD.start()
     GET_MAIL = MainClass()
     GET_MAIL.run()
-    #os.system('read -s -n 1 -p "Press any key to continue"')
