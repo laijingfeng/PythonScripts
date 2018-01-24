@@ -6,6 +6,7 @@
 import sys
 import os
 import json
+import hashlib
 
 class MainClass(object):
     """main class"""
@@ -33,6 +34,12 @@ class MainClass(object):
         self.enter_cwd_dir = os.getcwd()
         self.python_file_dir = os.path.dirname(sys.argv[0])
         self.work()
+    def cal_md5(self, file_path):
+        """cal md5"""
+        md5_val = ''
+        with open(file_path, 'rb') as f:
+            md5_val = hashlib.md5(f.read()).hexdigest()
+        return md5_val
     def work(self):
         """do real work"""
         with open(self.get_exe_path('./config.json'), 'r') as read_file:
@@ -40,6 +47,7 @@ class MainClass(object):
         test_name = config['test_name']
         test_age = config['test_age']
         print test_name, test_age
+        print self.cal_md5('./config.json')
 
 if __name__ == '__main__':
     MAIN_CLASS = MainClass()
