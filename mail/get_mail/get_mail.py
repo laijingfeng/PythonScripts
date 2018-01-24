@@ -9,6 +9,10 @@ import imaplib
 import email
 import threading
 import time
+import codecs
+import json
+from collections import OrderedDict
+import xlrd
 
 class MainClass(object):
     """main class"""
@@ -72,9 +76,48 @@ class MainClass(object):
         file_path = path + filename
         with open(file_path, 'wb') as file_handler:
             file_handler.write(data)
+    def upload_to_ftp(self):
+        """upload files to ftp"""
+        pass
+    def clean(self):
+        """clean files"""
+        files = os.listdir('./')
+        for filename in files:
+            if os.path.isfile(filename) and (filename.startswith('~') is False):
+                if filename.endswith('.xlsx') or filename.endswith('.json'):
+                    os.remove(filename)
+    def excel_to_json(self):
+        """excel to json return whether success"""
+        files = os.listdir('./')
+        for filename in files:
+            if os.path.isfile(filename) and filename.endswith('.xlsx') and (filename.startswith('~') is False):
+                convert_list = []
+                work_book = xlrd.open_workbook(filename)
+                sheet = work_book.sheet_by_index(0)
+                title = sheet.row_values(0)
+                data_type = sheet.row_values(1)
+                for row_num in range(3, sheet.nrows):
+                    row_value = sheet.row_values(row_num)
+                    single = OrderedDict()
+                    for col_num in range(0, len(row_value)):
+                        if data_type[col_num] == 'string':
+                            single[title[col_num]] = str(row_value[col_num]).replace('.0', '')
+                        elif data_type[col_num] == 'int':
+                            single[title[col_num]] = int(row_value[col_num])
+                        else:
+                            single[title[col_num]] = row_value[col_num]
+                    convert_list.append(single)
+                j = json.dumps(convert_list)
+                with codecs.open(filename.replace('.xlsx', '.json'), 'w', 'utf-8') as file_handler:
+                    file_handler.write(j)
     def work(self):
         """do real work"""
-        self.get_mail()
+        self.clean()
+        return
+        if self.get_mail() is True:
+            self.excel_to_json()
+            self.upload_to_ftp()
+            self.clean()
 
 class MyThread(threading.Thread):
     """my thread"""
@@ -82,8 +125,10 @@ class MyThread(threading.Thread):
         get_mail = MainClass()
         while True:
             get_mail.run()
-            time.sleep(2)
+            time.sleep(5)
 
 if __name__ == '__main__':
-    GET_MAIL_THREAD = MyThread()
-    GET_MAIL_THREAD.start()
+    #GET_MAIL_THREAD = MyThread()
+    #GET_MAIL_THREAD.start()
+    GET_MAIL = MainClass()
+    GET_MAIL.run()
