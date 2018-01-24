@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #-*-coding:utf-8-*-
-# version: 2018-01-22 14:48:44
+# version: 2018-01-24 16:20:46
 """send mail"""
 
 import sys
@@ -39,12 +39,12 @@ class MainClass(object):
     def send_mail(self):
         """send mail"""
         mail_host = 'smtp.exmail.qq.com'
-        mail_user = 'laijf@myjooy.com'
-        mail_pass = 'Lai123'
-        receiver = ['laijf@myjooy.com']
+        mail_user = 'user'
+        mail_pass = 'pass'
+        receiver = ['user']
         message = MIMEMultipart()
-        message['From'] = Header('Jerrylai', 'utf-8')
-        message['To'] = Header('Jerrylai', 'utf-8')
+        message['From'] = Header('name', 'utf-8')
+        message['To'] = Header('name', 'utf-8')
         message['Subject'] = Header('H5Table', 'utf-8')
         message.attach(MIMEText('H5Table', 'plain', 'utf-8'))
         has_att1 = False

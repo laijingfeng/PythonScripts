@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #-*-coding:utf-8-*-
-# version: 2018-01-22 14:48:44
+# version: 2018-01-24 16:19:43
 """get mail"""
 
 import sys
@@ -9,11 +9,6 @@ import imaplib
 import email
 import threading
 import time
-import codecs
-import json
-from collections import OrderedDict
-import ftplib
-import xlrd
 
 class MainClass(object):
     """main class"""
@@ -45,8 +40,8 @@ class MainClass(object):
         """get mail return whether has new mail"""
         ret = False
         mail_host = 'imap.exmail.qq.com'
-        mail_user = 'laijf@myjooy.com'
-        mail_pass = 'Lai123'
+        mail_user = 'user'
+        mail_pass = 'pass'
         server = imaplib.IMAP4_SSL(mail_host, 993)
         server.login(mail_user, mail_pass)
         server.select()
@@ -77,84 +72,9 @@ class MainClass(object):
         file_path = path + filename
         with open(file_path, 'wb') as file_handler:
             file_handler.write(data)
-    def upload_to_ftp(self):
-        """upload files to ftp"""
-        host = '106.15.181.140'
-        username = 'test1'
-        password = 'eYYFEJjt'
-        f = ftplib.FTP()
-        f.set_pasv(False)
-        f.set_debuglevel(0)
-        f.connect(host, 21, 25)
-        f.login(username, password)
-        path_is_right = False
-
-        try:
-            f.cwd('gawumengchong3d/test/')
-            path_is_right = True
-        except Exception as error:
-            print error.message
-            path_is_right = False
-        if path_is_right is False:
-            print 'path is error'
-            f.quit()
-            return False
-
-        pwd_path = f.pwd()
-        print pwd_path
-        files = os.listdir('./')
-        for filename in files:
-            if os.path.isfile(filename) and (filename.startswith('~') is False):
-                if filename.endswith('.txt'):
-                    fp = open(filename, 'rb')
-                    print filename
-                    f.storbinary('STOR ' + filename, fp, 1024 * 1024)
-                    fp.close()
-        f.quit()
-        return True
-    def clean(self):
-        """clean files"""
-        files = os.listdir('./')
-        for filename in files:
-            if os.path.isfile(filename) and (filename.startswith('~') is False):
-                if filename.endswith('.xlsx') or filename.endswith('.json'):
-                    os.remove(filename)
-    def excel_to_json(self):
-        """excel to json return whether success"""
-        files = os.listdir('./')
-        for filename in files:
-            if os.path.isfile(filename) and filename.endswith('.xlsx') and (filename.startswith('~') is False):
-                convert_list = []
-                work_book = xlrd.open_workbook(filename)
-                sheet = work_book.sheet_by_index(0)
-                title = sheet.row_values(0)
-                data_type = sheet.row_values(1)
-                for row_num in range(3, sheet.nrows):
-                    row_value = sheet.row_values(row_num)
-                    single = OrderedDict()
-                    for col_num in range(0, len(row_value)):
-                        if data_type[col_num] == 'string':
-                            single[title[col_num]] = str(row_value[col_num]).replace('.0', '')
-                        elif data_type[col_num] == 'int':
-                            single[title[col_num]] = int(row_value[col_num])
-                        else:
-                            single[title[col_num]] = row_value[col_num]
-                    convert_list.append(single)
-                j = json.dumps(convert_list)
-                with codecs.open(filename.replace('.xlsx', '.json'), 'w', 'utf-8') as file_handler:
-                    file_handler.write(j)
-    def any_key_exit(self):
-        """any key to exit"""
-        os.system('pause')
     def work(self):
         """do real work"""
-        #self.upload_to_ftp()
-        self.any_key_exit()
-        return
-        if self.get_mail() is True:
-            self.excel_to_json()
-            self.upload_to_ftp()
-            self.clean()
+        self.get_mail()
 
 class MyThread(threading.Thread):
     """my thread"""
@@ -169,4 +89,3 @@ if __name__ == '__main__':
     #GET_MAIL_THREAD.start()
     GET_MAIL = MainClass()
     GET_MAIL.run()
-    #os.system('read -s -n 1 -p "Press any key to continue"')
