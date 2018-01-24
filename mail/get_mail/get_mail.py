@@ -7,6 +7,8 @@ import sys
 import os
 import imaplib
 import email
+import threading
+import time
 
 class MainClass(object):
     """main class"""
@@ -74,6 +76,14 @@ class MainClass(object):
         """do real work"""
         self.get_mail()
 
+class MyThread(threading.Thread):
+    """my thread"""
+    def run(self):
+        get_mail = MainClass()
+        while True:
+            get_mail.run()
+            time.sleep(2)
+
 if __name__ == '__main__':
-    MAIN_CLASS = MainClass()
-    MAIN_CLASS.run()
+    GET_MAIL_THREAD = MyThread()
+    GET_MAIL_THREAD.start()
