@@ -47,17 +47,29 @@ class MainClass(object):
         message['To'] = Header('Jerrylai', 'utf-8')
         message['Subject'] = Header('H5Table', 'utf-8')
         message.attach(MIMEText('H5Table', 'plain', 'utf-8'))
-        att1 = MIMEText(open('ComboDiffcult.xlsx', 'rb').read(), 'base64', 'utf-8')
-        att1["Content-Type"] = 'application/octet-stream'
-        att1["Content-Disposition"] = 'attachment; filename="ComboDiffcult.xlsx"'
-        message.attach(att1)
-        try:
-            smtp_object = smtplib.SMTP_SSL(mail_host, 465)
-            smtp_object.login(mail_user, mail_pass)
-            smtp_object.sendmail(mail_user, [receiver,], message.as_string())
-            smtp_object.quit()
-            return True
-        except smtplib.SMTPException:
+        has_att1 = False
+        files = os.listdir('./')
+        for filename in files:
+            if os.path.isfile(filename) and (filename.startswith('~') is False):
+                if filename.endswith('.xlsx'):
+                    att1 = MIMEText(open(filename, 'rb').read(), 'base64', 'utf-8')
+                    att1["Content-Type"] = 'application/octet-stream'
+                    att1["Content-Disposition"] = 'attachment; filename="' + filename +'"'
+                    message.attach(att1)
+                    has_att1 = True
+        if has_att1 is True:
+            try:
+                smtp_object = smtplib.SMTP_SSL(mail_host, 465)
+                smtp_object.login(mail_user, mail_pass)
+                smtp_object.sendmail(mail_user, [receiver,], message.as_string())
+                smtp_object.quit()
+                print 'send success'
+                return True
+            except smtplib.SMTPException:
+                print 'send error'
+                return False
+        else:
+            print 'no excel file'
             return False
     def work(self):
         """do real work"""
