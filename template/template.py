@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # encoding=utf-8
-# version: 2018-01-25 10:56:44
+# version: 2018-01-29 15:17:39
 """
 代码模板
 """
@@ -19,6 +19,13 @@ class MainClass(object):
         """
         self.enter_cwd_dir = ''
         self.python_file_dir = ''
+
+    def __init_data__(self):
+        """
+        初始化数据
+        """
+        pass
+
     def parse_arg(self):
         """
         解析参数\n
@@ -57,6 +64,7 @@ class MainClass(object):
             pass  # 这句只是为了去掉提示变量未使用
         self.enter_cwd_dir = os.getcwd()
         self.python_file_dir = os.path.dirname(sys.argv[0])
+        self.__init_data__()
         self.work()
     def work(self):
         """
