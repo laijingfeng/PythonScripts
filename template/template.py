@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # encoding=utf-8
-# version: 2018-01-29 15:17:39
+# version: 2018-02-10 14:12:26
 """
 代码模板
 """
@@ -40,7 +40,7 @@ class MainClass(object):
         #     file_name = file_name.split('.')[0]
         #     pars = file_name.split('^')
         #     if len(pars) > 1:
-        #         print len(pars), pars[1]
+        #         print len(pars), [pars[1]]
         return True, sys.argv
     def get_exe_path(self, simple_path):
         """
