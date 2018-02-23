@@ -71,8 +71,8 @@ class MainClass(object):
         """
         do real work
         """
-        with codecs.open(self.get_exe_path('./config.json'), 'r', 'utf-8') as read_file:
-            config = json.load(read_file)
+        with codecs.open(self.get_exe_path('./config.json'), 'r', 'utf-8') as file_handle:
+            config = json.load(file_handle)
         test_name = config['test_name']
         test_age = config['test_age']
         print test_name, test_age
