@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # encoding=utf-8
-# version: 2018-02-10 14:12:26
+# version: 2018-02-23 14:42:59
 """
 代码模板
 """
@@ -8,6 +8,7 @@
 import sys
 import os
 import json
+import codecs
 
 class MainClass(object):
     """
@@ -70,7 +71,7 @@ class MainClass(object):
         """
         do real work
         """
-        with open(self.get_exe_path('./config.json'), 'r') as read_file:
+        with codecs.open(self.get_exe_path('./config.json'), 'r', 'utf-8') as read_file:
             config = json.load(read_file)
         test_name = config['test_name']
         test_age = config['test_age']
