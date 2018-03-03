@@ -1,8 +1,9 @@
 #!/usr/bin/python
 # encoding=utf-8
-# version: 2018-02-23 14:42:59
+# version: 2018-03-03 18:24:48
 """
-替换文件内容
+替换文件\n
+路径和文件名不支持中文
 """
 
 import sys
@@ -20,6 +21,11 @@ class MainClass(object):
         """
         self.enter_cwd_dir = ''
         self.python_file_dir = ''
+        self.config = {}  # 替换字典
+        self.is_recursion = True  # 是否递归
+        self.with_file_name = False  # 是否处理文件名
+        self.with_file_content = True  # 是否处理文件内容
+        self.replace_root = './files/'  # 要替换的根目录
 
     def __init_data__(self):
         """
@@ -67,15 +73,45 @@ class MainClass(object):
         self.python_file_dir = os.path.dirname(sys.argv[0])
         self.__init_data__()
         self.work()
+    def work_dir(self, path, deep):
+        """
+        处理一个目录
+        """
+        if deep > 0 and self.is_recursion is False:
+            return
+        for file_name in os.listdir(path):
+            file_path = os.path.join(path, file_name)
+            if os.path.isdir(file_path):
+                self.work_dir(file_path, deep + 1)
+            else:
+                self.work_file(path, file_name)
+    def work_file(self, file_dir, file_name):
+        """
+        处理一个文件
+        """
+        file_path = os.path.join(file_dir, file_name)
+        if self.with_file_content:
+            new_content = self.do_replace(codecs.open(file_path, 'rb', 'utf-8').read())
+            codecs.open(file_path, 'wb', 'utf-8').write(new_content)
+        if self.with_file_name:
+            file_name_new = self.do_replace(file_name)
+            if file_name != file_name_new:
+                os.rename(file_path, os.path.join(file_dir, file_name_new))
+    def do_replace(self, content):
+        """
+        替换
+        """
+        for key in self.config.keys():
+            if content.count(key) > 0:
+                content = content.replace(key, self.config[key])
+        return content
     def work(self):
         """
         do real work
         """
         with codecs.open(self.get_exe_path('./config.json'), 'r', 'utf-8') as file_handle:
-            config = json.load(file_handle)
-        test_name = config['test_name']
-        test_age = config['test_age']
-        print test_name, test_age
+            self.config = json.load(file_handle)
+        self.work_dir(self.get_exe_path(self.replace_root), 0)
 
 if __name__ == '__main__':
     MAIN_CLASS = MainClass()
