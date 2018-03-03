@@ -1,8 +1,10 @@
 #! /usr/bin/env python
 #coding=utf-8
-#version: 2017-05-18-00
+#version: 2018-03-03 16:05:38
 
-import os, os.path, sys
+import os
+import os.path
+import sys
 
 def Replace(text):
     global replaceDic
@@ -39,5 +41,3 @@ if __name__ == '__main__':
                     replaceDic[pars[0]] = pars[1]
 
     DoReplace('./files/')
-    
-                
