@@ -29,10 +29,10 @@ class MainFrameUI ( wx.Frame ):
 		self.m_staticText2.Wrap( -1 )
 		bSizer2.Add( self.m_staticText2, 0, wx.ALL, 5 )
 		
-		self.m_text_dir = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 300,-1 ), 0 )
-		self.m_text_dir.SetToolTipString( u"把目录拖拽到这里" )
+		self.m_textCtrl_dir = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 300,-1 ), 0 )
+		self.m_textCtrl_dir.SetToolTipString( u"把目录拖拽到这里" )
 		
-		bSizer2.Add( self.m_text_dir, 0, wx.ALL, 5 )
+		bSizer2.Add( self.m_textCtrl_dir, 0, wx.ALL, 5 )
 		
 		
 		bSizer1.Add( bSizer2, 1, 0, 5 )
@@ -65,10 +65,10 @@ class MainFrameUI ( wx.Frame ):
 		
 		bSizer1.Add( bSizer31, 1, wx.EXPAND, 5 )
 		
-		self.m_checkBox_with_content = wx.CheckBox( self, wx.ID_ANY, u"是否先清空目录", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_checkBox_with_content.SetToolTipString( u"是否先清空目录" )
+		self.m_checkBox_clean = wx.CheckBox( self, wx.ID_ANY, u"是否先清空目录", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_checkBox_clean.SetToolTipString( u"是否先清空目录" )
 		
-		bSizer1.Add( self.m_checkBox_with_content, 0, wx.ALL, 5 )
+		bSizer1.Add( self.m_checkBox_clean, 0, wx.ALL, 5 )
 		
 		self.m_button_replace = wx.Button( self, wx.ID_ANY, u"查找", wx.Point( -1,-1 ), wx.DefaultSize, 0 )
 		bSizer1.Add( self.m_button_replace, 0, wx.ALL, 5 )
