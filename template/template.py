@@ -1,4 +1,4 @@
-#!/usr/bin/python
+# !/usr/bin/python
 # encoding=utf-8
 # version: 2018-02-23 14:42:59
 """
