@@ -1,6 +1,6 @@
 # !/usr/bin/python
 # encoding=utf-8
-# version: 2018-03-09 13:54:42
+# version: 2018-03-19 00:35:05
 """
 收集依赖
 """
@@ -69,7 +69,6 @@ class MainFrame(collect_dependency_ui.MainFrameUI):
         with codecs.open(self.get_exe_path(path), 'r', 'utf-8') as file_handle:
             config = json.load(file_handle)
         for key in config['dependencies']:
-            print "key:" + key
             self.work_one_dll(key)
     
     def work_one_dll(self, filename):
