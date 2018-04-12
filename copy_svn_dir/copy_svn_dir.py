@@ -76,7 +76,7 @@ class MainClass(object):
         with codecs.open(self.get_exe_path('./config.json'), 'r', 'utf-8') as file_handle:
             self.config = json.load(file_handle)
         dir_name = self.config['dir_name']
-        self.copy_dir(self.get_exe_path('./{}/'.format(dir_name)), self.get_exe_path('./{}_back/').format(dir_name))
+        self.copy_dir(self.get_exe_path('./{}/'.format(dir_name)), self.get_exe_path('./{}_back/'.format(dir_name)))
     def copy_dir(self, dir_from, dir_to):
         if os.path.exists(dir_from) is False:
             return
