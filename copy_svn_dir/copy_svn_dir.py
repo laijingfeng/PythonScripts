@@ -102,7 +102,13 @@ class MainClass(object):
             if os.path.isdir(dir_from2):
                 self.copy_dir(dir_from2, dir_to2)
             else:
-                shutil.copy(dir_from2, dir_to2)
+                need = True
+                for p in self.config['except_file_tag']:
+                    if p.find(dir_from2) != -1:
+                        need = False
+                        break
+                if need is True:
+                    shutil.copy(dir_from2, dir_to2)
 
 if __name__ == '__main__':
     MAIN_CLASS = MainClass()
