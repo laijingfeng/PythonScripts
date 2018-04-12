@@ -104,7 +104,7 @@ class MainClass(object):
             else:
                 need = True
                 for p in self.config['except_file_tag']:
-                    if p.find(dir_from2) != -1:
+                    if dir_from2.find(p) != -1:
                         need = False
                         break
                 if need is True:
