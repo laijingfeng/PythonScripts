@@ -1,0 +1,12 @@
+{
+	"dir_name": "aa",
+    "except": [
+		".svn",
+		"Library",
+		"Temp",
+		"obj"
+	],
+	"except2":[
+		"client/tools"
+	]
+}
