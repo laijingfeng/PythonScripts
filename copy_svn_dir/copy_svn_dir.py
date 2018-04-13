@@ -69,6 +69,13 @@ class MainClass(object):
         self.python_file_dir = os.path.dirname(sys.argv[0])
         self.__init_data__()
         self.work()
+    def to_unicode(self, data):
+        """
+        数据转unicode
+        """
+        #if type(data) == str:
+        #data = data.decode('utf8')
+        return data
     def work(self):
         """
         do real work
@@ -84,12 +91,12 @@ class MainClass(object):
             return
         name_from = os.path.split(dir_from)[1]
         for p in self.config['except']:
-            if p == name_from:
+            if p == self.to_unicode(name_from):
                 return
         tmp = os.path.split(dir_from)[0]
         name_from2 = os.path.split(tmp)[1] + '/' + name_from
         for p in self.config['except2']:
-            if p == name_from2:
+            if p == self.to_unicode(name_from2):
                 return
 
         if not os.path.exists(dir_to):
@@ -103,10 +110,10 @@ class MainClass(object):
                 self.copy_dir(dir_from2, dir_to2)
             else:
                 need = True
-                for p in self.config['except_file_tag']:
-                    if dir_from2.find(p) != -1:
-                        need = False
-                        break
+                #for p in self.config['except_file_tag']:
+                #    if self.to_unicode(dir_from2).find(p) != -1:
+                #        need = False
+                #        break
                 if need is True:
                     shutil.copy(dir_from2, dir_to2)
 
