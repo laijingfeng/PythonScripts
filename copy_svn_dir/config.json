@@ -1,18 +1,27 @@
 {
+	"work": "backup",
 	"dir_name": "Rabbit0405",
-    "except": [
+	"except": [
 		".svn",
-		"Library",
-		"Temp",
-		"obj"
+		".vs",
+		"Library"
 	],
 	"except2": [
-		"client/tools"
+		"client/tools",
+		"game/obj",
+		"game/Temp",
+		"trunk/bin",
+		"trunk/obj"
 	],
 	"except_file_tag": [
-		".csproj",
-		".sln",
-		".suo",
-		".userprefs"
+		"Assembly-CSharp.csproj",
+		"Assembly-CSharp-Editor.csproj",
+		"Assembly-CSharp-firstpass.csproj",
+		"game.sln",
+		"game.suo",
+		"game.userprefs",
+		".apk",
+		".zip",
+		".rar"
 	]
 }

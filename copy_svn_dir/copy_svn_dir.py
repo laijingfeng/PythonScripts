@@ -73,8 +73,7 @@ class MainClass(object):
         """
         数据转unicode
         """
-        #if type(data) == str:
-        #data = data.decode('utf8')
+        data = str(data).strip().decode('utf-8')
         return data
     def work(self):
         """
@@ -83,20 +82,44 @@ class MainClass(object):
         with codecs.open(self.get_exe_path('./config.json'), 'r', 'utf-8') as file_handle:
             self.config = json.load(file_handle)
         dir_name = self.config['dir_name']
-        self.copy_dir(self.get_exe_path('./{}/'.format(dir_name)), self.get_exe_path('./{}_back/'.format(dir_name)))
+        dir_path = self.get_exe_path('./{}/'.format(dir_name))
+        if self.config['work'] == 'return':
+            tar_path = dir_path.replace('_back', '')
+            self.delete(tar_path)
+            self.copy_dir(dir_path, tar_path)
+        elif self.config['work'] == 'backup':
+            tar_path = self.get_exe_path('./{}_back/'.format(dir_name))
+            self.copy_dir(dir_path, tar_path)
+        else:
+            print 'no cmd'
+
+    def delete(self, root_dir):
+        """
+        清除
+        """
+        check_path = [
+            './common/',
+            "./client/game/",
+            "./client/src/",
+        ]
+        for p in check_path:
+            work_path = os.path.join(root_dir, p)
+            if os.path.exists(work_path):
+                shutil.rmtree(work_path)
     def copy_dir(self, dir_from, dir_to):
+        dir_from = self.to_unicode(dir_from)
         if os.path.exists(dir_from) is False:
             return
         if os.path.isdir(dir_from) is False:
             return
         name_from = os.path.split(dir_from)[1]
         for p in self.config['except']:
-            if p == self.to_unicode(name_from):
+            if p == name_from:
                 return
         tmp = os.path.split(dir_from)[0]
         name_from2 = os.path.split(tmp)[1] + '/' + name_from
         for p in self.config['except2']:
-            if p == self.to_unicode(name_from2):
+            if p == name_from2:
                 return
 
         if not os.path.exists(dir_to):
@@ -110,13 +133,15 @@ class MainClass(object):
                 self.copy_dir(dir_from2, dir_to2)
             else:
                 need = True
-                #for p in self.config['except_file_tag']:
-                #    if self.to_unicode(dir_from2).find(p) != -1:
-                #        need = False
-                #        break
+                for p in self.config['except_file_tag']:
+                    if self.to_unicode(dir_from2).find(p) != -1:
+                        need = False
+                        break
                 if need is True:
                     shutil.copy(dir_from2, dir_to2)
 
 if __name__ == '__main__':
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
     MAIN_CLASS = MainClass()
     MAIN_CLASS.run()
