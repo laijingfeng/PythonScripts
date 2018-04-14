@@ -1,6 +1,6 @@
 # !/usr/bin/python
 # encoding=utf-8
-# version: 2018-04-12 22:36:15
+# version: 2018-04-14 23:58:51
 """
 拷贝SVN
 """
@@ -81,15 +81,13 @@ class MainClass(object):
         """
         with codecs.open(self.get_exe_path('./config.json'), 'r', 'utf-8') as file_handle:
             self.config = json.load(file_handle)
-        dir_name = self.config['dir_name']
-        dir_path = self.get_exe_path('./{}/'.format(dir_name))
-        if self.config['work'] == 'return':
-            tar_path = dir_path.replace('_back', '')
-            self.delete(tar_path)
-            self.copy_dir(dir_path, tar_path)
-        elif self.config['work'] == 'backup':
-            tar_path = self.get_exe_path('./{}_back/'.format(dir_name))
-            self.copy_dir(dir_path, tar_path)
+        dir_from = self.get_exe_path(self.config['dir_from'])
+        dir_to = self.get_exe_path(self.config['dir_to'])
+        if self.config['work'] == 'return':  # 重现
+            self.delete(dir_to)
+            self.copy_dir(dir_from, dir_to)
+        elif self.config['work'] == 'backup':  # 备份
+            self.copy_dir(dir_from, dir_to)
         else:
             print 'no cmd'
 

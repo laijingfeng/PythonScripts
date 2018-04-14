@@ -1,6 +1,11 @@
 {
-	"work": "backup",
-	"dir_name": "Rabbit0405",
+	"work": "return",
+	"dir_from": "H:/Rabbit/RabbitOnline/",
+	"dir_to": "E:/WorkSpace/Unity5.6.1/Rabbit_online/",
+	
+	"dir_from_1": "H:/Rabbit/RabbitOnline/",
+	"dir_to_1": "E:/WorkSpace/Unity5.6.1/Rabbit_online/",
+	
 	"except": [
 		".svn",
 		".vs",
