@@ -1,22 +1,24 @@
 {
-	"work": "return",
+	"work": "restore",
 	"dir_from": "H:/Rabbit/RabbitOnline/",
 	"dir_to": "E:/WorkSpace/Unity5.6.1/Rabbit_online/",
-	
-	"dir_from_1": "H:/Rabbit/RabbitOnline/",
-	"dir_to_1": "E:/WorkSpace/Unity5.6.1/Rabbit_online/",
-	
-	"except": [
+	"restore_delete_dir": [
+		"./common/",
+		"./client/src/",
+		"./client/game/Assets/",
+		"./client/game/ProjectSettins/"
+	],
+	"except_dir": [
 		".svn",
 		".vs",
 		"Library"
 	],
-	"except2": [
+	"except_joined_dir": [
 		"client/tools",
 		"game/obj",
 		"game/Temp",
-		"trunk/bin",
-		"trunk/obj"
+		"trunk/obj",
+		"trunk/bin"
 	],
 	"except_file_tag": [
 		"Assembly-CSharp.csproj",

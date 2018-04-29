@@ -1,6 +1,6 @@
 # !/usr/bin/python
 # encoding=utf-8
-# version: 2018-04-14 23:58:51
+# version: 2018-04-30 02:22:54
 """
 拷贝SVN
 """
@@ -21,7 +21,7 @@ class MainClass(object):
         """
         self.enter_cwd_dir = ''
         self.python_file_dir = ''
-        self.config = ''
+        self.config = ''  # 配置
 
     def __init_data__(self):
         """
@@ -83,7 +83,7 @@ class MainClass(object):
             self.config = json.load(file_handle)
         dir_from = self.get_exe_path(self.config['dir_from'])
         dir_to = self.get_exe_path(self.config['dir_to'])
-        if self.config['work'] == 'return':  # 重现
+        if self.config['work'] == 'restore':  # 还原
             self.delete(dir_to)
             self.copy_dir(dir_from, dir_to)
         elif self.config['work'] == 'backup':  # 备份
@@ -95,28 +95,28 @@ class MainClass(object):
         """
         清除
         """
-        check_path = [
-            './common/',
-            "./client/game/",
-            "./client/src/",
-        ]
-        for p in check_path:
+        for p in self.config['restore_delete_dir']:
             work_path = os.path.join(root_dir, p)
             if os.path.exists(work_path):
                 shutil.rmtree(work_path)
     def copy_dir(self, dir_from, dir_to):
+        """
+        目录拷贝
+        """
         dir_from = self.to_unicode(dir_from)
         if os.path.exists(dir_from) is False:
             return
         if os.path.isdir(dir_from) is False:
             return
+
         name_from = os.path.split(dir_from)[1]
-        for p in self.config['except']:
+        for p in self.config['except_dir']:
             if p == name_from:
                 return
+        
         tmp = os.path.split(dir_from)[0]
         name_from2 = os.path.split(tmp)[1] + '/' + name_from
-        for p in self.config['except2']:
+        for p in self.config['except_joined_dir']:
             if p == name_from2:
                 return
 
