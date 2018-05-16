@@ -1,6 +1,6 @@
 # !/usr/bin/python
 # encoding=utf-8
-# version: 2018-04-15 00:20:50
+# version: 2018-05-16 13:49:51
 """
 代码模板
 """
@@ -55,7 +55,8 @@ class MainClass(object):
         """
         初始化数据
         """
-        pass
+        with codecs.open(self.get_exe_path('./config.json'), 'r', 'utf-8') as file_handle:
+            self.config = json.load(file_handle)
 
     def to_unicode(self, data):
         """
@@ -89,8 +90,6 @@ class MainClass(object):
         """
         do real work
         """
-        with codecs.open(self.get_exe_path('./config.json'), 'r', 'utf-8') as file_handle:
-            self.config = json.load(file_handle)
         for key in self.config.keys():
             print 'self.config[{}] = {}'.format(key, self.config[key])
         for key in self.argv.keys():
