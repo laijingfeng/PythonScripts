@@ -1,6 +1,6 @@
 # !/usr/bin/python
 # encoding=utf-8
-# version: 2018-05-16 13:49:51
+# version: 2018-05-21 13:38:57
 """
 代码模板
 """
@@ -35,14 +35,15 @@ class MainClass(object):
             file_name = sys.argv[0]
             file_name = os.path.split(file_name)[1]  # 去掉目录
             file_name = file_name.split('.')[0]  # 去掉后缀
-            pars = file_name.split('^', 1)[1]  # 去掉文件名
-            pars = pars.split('^')  # 分离参数
-            if len(pars) > 1:
-                for par in pars:
-                    if par.find('-') != -1:
-                        par_key = par.split('-', 1)[0]
-                        par_val = par.split('-', 1)[1]
-                        self.argv[par_key] = par_val
+            if file_name.count('^') > 0:
+                pars = file_name.split('^', 1)[1]  # 去掉文件名
+                pars = pars.split('^')  # 分离参数
+                if len(pars) > 1:
+                    for par in pars:
+                        if par.find('-') != -1:
+                            par_key = par.split('-', 1)[0]
+                            par_val = par.split('-', 1)[1]
+                            self.argv[par_key] = par_val
         return True, sys.argv
     
     def usage(self):
@@ -53,7 +54,7 @@ class MainClass(object):
     
     def __init_data__(self):
         """
-        初始化数据
+        初始化数据，解析参数之后
         """
         with codecs.open(self.get_exe_path('./config.json'), 'r', 'utf-8') as file_handle:
             self.config = json.load(file_handle)
