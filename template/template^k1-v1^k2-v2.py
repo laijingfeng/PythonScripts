@@ -1,6 +1,6 @@
 # !/usr/bin/python
 # encoding=utf-8
-# version: 2018-05-21 13:38:57
+# version: 2018-05-23 01:44:52
 """
 代码模板
 """
@@ -26,10 +26,10 @@ class MainClass(object):
     def parse_argv(self):
         """
         解析参数\n
-        返回是否成和参数列表
+        返回是否成功
         """
         if len(sys.argv) < 1:
-            return False, None
+            return False
         # 解析文件名参数
         if len(sys.argv) == 1:
             file_name = sys.argv[0]
@@ -37,14 +37,22 @@ class MainClass(object):
             file_name = file_name.split('.')[0]  # 去掉后缀
             if file_name.count('^') > 0:
                 pars = file_name.split('^', 1)[1]  # 去掉文件名
-                pars = pars.split('^')  # 分离参数
-                if len(pars) > 1:
-                    for par in pars:
-                        if par.find('-') != -1:
-                            par_key = par.split('-', 1)[0]
-                            par_val = par.split('-', 1)[1]
-                            self.argv[par_key] = par_val
-        return True, sys.argv
+                self.parse_give_argv(pars)
+        else:
+            self.parse_give_argv(sys.argv[1])
+        return True
+    
+    def parse_give_argv(self, argvs):
+        """
+        解析指定参数\n
+        独立出来，也可以手动执行
+        """
+        pars = argvs.split('^')  # 分离参数
+        for par in pars:
+            if par.find('-') != -1:
+                par_key = par.split('-', 1)[0]
+                par_val = par.split('-', 1)[1]
+                self.argv[par_key] = par_val
     
     def usage(self):
         """
