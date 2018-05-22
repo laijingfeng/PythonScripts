@@ -20,7 +20,7 @@ class MainClass(object):
         """
         self.enter_cwd_dir = ''  # 执行路径
         self.python_file_dir = ''  # python文件路径
-        self.argv = {}  # 参数，模板只解析了文件名参数，参考：template^k1-v1^k2-v2.py
+        self.argv = {}  # 参数，文件名参考：template^k1-v1^k2-v2.py
         self.config = ''  # 配置
 
     def parse_argv(self):
@@ -84,12 +84,10 @@ class MainClass(object):
         """
         类入口
         """
-        success, args = self.parse_argv()
+        success = self.parse_argv()
         if not success:
             self.usage()
             exit(-1)
-        if args is None:
-            pass  # 这句只是为了去掉提示变量未使用
         self.enter_cwd_dir = os.getcwd()
         self.python_file_dir = os.path.dirname(sys.argv[0])
         self.__init_data__()
