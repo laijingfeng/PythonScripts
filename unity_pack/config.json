@@ -2,5 +2,7 @@
     "unity_path": "C:/MyPro/Unity561/Editor/Unity.exe",
 	"project_path": "C:/MyWork/RabbitWebGL/client/tools",
 	"table_method": "AutoBuild.PackTable",
-	"res_method": "AutoBuild.PackRes"
+	"res_method": "AutoBuild.PackRes",
+	
+	"Web_res_path": "C:/MyPro/phpStudy/PHPTutorial/WWW/WebGL/StreamingAssets"
 }

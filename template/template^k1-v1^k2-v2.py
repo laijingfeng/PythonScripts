@@ -1,6 +1,6 @@
 # !/usr/bin/python
 # encoding=utf-8
-# version: 2018-06-22 13:21:53
+# version: 2018-06-22 18:47:45
 """
 工具模板
 """
@@ -84,10 +84,15 @@ class MainClass(object):
         self.logger.reset()
     
     @staticmethod
-    def execute_shell_command(cls, args, wait = 'T'):
+    def execute_shell_command(args, wait=True):
+        """
+        执行外部命令\n
+        args 参数列表\n
+        wait 是否等候
+        """
         ret = ExeRsp()
         p = subprocess.Popen(args, stderr=subprocess.PIPE)
-        if wait == 'T':
+        if wait is True:
             ret.returncode = p.wait()
             ret.stderr = p.stderr.read()
             return ret
