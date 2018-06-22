@@ -1,14 +1,16 @@
 # !/usr/bin/python
 # encoding=utf-8
-# version: 2018-05-23 01:44:52
+# version: 2018-06-22 13:21:53
 """
-代码模板
+工具模板
 """
 
 import sys
 import os
 import json
 import codecs
+sys.path.append('..')
+from logger import Logger
 
 class MainClass(object):
     """
@@ -22,6 +24,9 @@ class MainClass(object):
         self.python_file_dir = ''  # python文件路径
         self.argv = {}  # 参数，文件名参考：template^k1-v1^k2-v2.py
         self.config = ''  # 配置
+
+        self.log_path = './work'  # 日志文件名
+        self.logger = ''  # 日志工具
 
     def parse_argv(self):
         """
@@ -66,6 +71,8 @@ class MainClass(object):
         """
         with codecs.open(self.get_exe_path('./config.json'), 'r', 'utf-8') as file_handle:
             self.config = json.load(file_handle)
+        self.logger = Logger(Logger.LEVEL_INFO, self.get_exe_path(self.log_path))
+        self.logger.reset()
 
     def to_unicode(self, data):
         """
