@@ -83,7 +83,7 @@ class MainClass(object):
         self.logger = Logger(Logger.LEVEL_INFO, self.get_exe_path(self.log_path))
         self.logger.reset()
     
-    @classmethod
+    @staticmethod
     def execute_shell_command(cls, args, wait = 'T'):
         ret = ExeRsp()
         p = subprocess.Popen(args, stderr=subprocess.PIPE)
