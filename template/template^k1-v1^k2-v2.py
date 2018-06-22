@@ -9,8 +9,17 @@ import sys
 import os
 import json
 import codecs
+import subprocess
 sys.path.append('..')
 from logger import Logger
+
+class ExeRsp(object):
+    """
+    执行命令返回值
+    """
+    def __init__(self):
+        self.returncode = 0  # 返回值
+        self.stderr = ''  # 错误
 
 class MainClass(object):
     """
@@ -73,6 +82,18 @@ class MainClass(object):
             self.config = json.load(file_handle)
         self.logger = Logger(Logger.LEVEL_INFO, self.get_exe_path(self.log_path))
         self.logger.reset()
+    
+    @classmethod
+    def execute_shell_command(cls, args, wait = 'T'):
+        ret = ExeRsp()
+        p = subprocess.Popen(args, stderr=subprocess.PIPE)
+        if wait == 'T':
+            ret.returncode = p.wait()
+            ret.stderr = p.stderr.read()
+            return ret
+        else:
+            ret.returncode = 0
+            return ret
 
     def to_unicode(self, data):
         """
