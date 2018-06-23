@@ -1,6 +1,6 @@
-#!/usr/bin/python
+# !/usr/bin/python
 # encoding=utf-8
-# version: 2018-01-29 11:16:39
+# version: 2018-06-23 15:58:35
 """
 Log模块
 """
@@ -78,7 +78,6 @@ class Logger(object):
         """
         self.__set_cmd_color__(self.foregroundColor[fore_color] | self.backgroundColor[back_color])
         log_info = '{}|{}|{}'.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), level, content)
-        print log_info
         self.__set_cmd_default_color__()
 
         if self.__out_file__ == 1:
