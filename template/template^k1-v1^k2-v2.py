@@ -1,6 +1,6 @@
 # !/usr/bin/python
 # encoding=utf-8
-# version: 2018-06-22 18:47:45
+# version: 2018-07-01 15:54:25
 """
 工具模板
 """
@@ -105,6 +105,22 @@ class MainClass(object):
         数据转unicode
         """
         data = str(data).strip().decode('utf-8')
+        return data
+    
+    def gbk_to_utf8(self, data):
+        """
+        gbk转utf8\n
+        部分Windows软件使用gbk
+        """
+        data = str(data).strip().decode('gbk').encode('utf-8')
+        return data
+    
+    def utf8_to_gbk(self, data):
+        """
+        utf8转gbk\n
+        部分Windows软件使用gbk
+        """
+        data = str(data).strip().decode('utf-8').encode('gbk')
         return data
     
     def get_exe_path(self, simple_path):
