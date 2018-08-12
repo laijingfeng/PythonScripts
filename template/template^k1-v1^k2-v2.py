@@ -1,6 +1,6 @@
 # !/usr/bin/python
 # encoding=utf-8
-# version: 2018-07-01 15:54:25
+# version: 2018-08-13 01:14:45
 """
 工具模板
 """
@@ -10,7 +10,7 @@ import os
 import json
 import codecs
 import subprocess
-sys.path.append('..')
+sys.path.append(os.path.join(os.path.dirname(sys.argv[0]), '../'))
 from logger import Logger
 
 class ExeRsp(object):
@@ -144,7 +144,7 @@ class MainClass(object):
     
     def work(self):
         """
-        do real work
+        实际工作逻辑
         """
         for key in self.config.keys():
             print 'self.config[{}] = {}'.format(key, self.config[key])
