@@ -1,6 +1,6 @@
 # !/usr/bin/python
 # encoding=utf-8
-# version: 2018-07-11 14:04:20
+# version: 2018-08-20 10:34:17
 """
 一些常用小功能
 """
@@ -24,7 +24,7 @@ class JerryUtil(object):
         if os.path.isfile(path):
             os.remove(path)
         else:
-            shutil.rmtree(path)
+            shutil.rmtree(path, True)
     
     @staticmethod
     def copy_dir(src, des):
