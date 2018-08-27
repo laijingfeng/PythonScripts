@@ -1,6 +1,6 @@
 # !/usr/bin/python
 # encoding=utf-8
-# version: 2018-08-13 01:14:45
+# version: 2018-08-27 17:46:55
 """
 工具模板
 """
@@ -78,11 +78,13 @@ class MainClass(object):
         """
         初始化数据，解析参数之后
         """
-        with codecs.open(self.get_exe_path('./config.json'), 'r', 'utf-8') as file_handle:
-            self.config = json.load(file_handle)
+        # 日志工具放前面，这个要尽量成功构建
         self.logger = Logger(Logger.LEVEL_INFO, self.get_exe_path(self.log_path))
         self.logger.reset()
-    
+
+        with codecs.open(self.get_exe_path('./config.json'), 'r', 'utf-8') as file_handle:
+            self.config = json.load(file_handle)
+        
     @staticmethod
     def execute_shell_command(args, wait=True):
         """
