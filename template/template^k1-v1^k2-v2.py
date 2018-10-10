@@ -1,6 +1,6 @@
 # !/usr/bin/python
 # encoding=utf-8
-# version: 2018-08-27 17:46:55
+# version: 2018-10-10 10:06:28
 """
 工具模板
 """
@@ -9,6 +9,7 @@ import sys
 import os
 import json
 import codecs
+import traceback
 import subprocess
 sys.path.append(os.path.join(os.path.dirname(sys.argv[0]), '../'))
 from logger import Logger
@@ -32,7 +33,7 @@ class MainClass(object):
         self.enter_cwd_dir = ''  # 执行路径
         self.python_file_dir = ''  # python文件路径
         self.argv = {}  # 参数，文件名参考：template^k1-v1^k2-v2.py
-        self.config = ''  # 配置
+        self.config = {}  # 配置
 
         self.log_path = './work'  # 日志文件名
         self.logger = ''  # 日志工具
@@ -82,9 +83,10 @@ class MainClass(object):
         self.logger = Logger(Logger.LEVEL_INFO, self.get_exe_path(self.log_path))
         self.logger.reset()
 
-        with codecs.open(self.get_exe_path('./config.json'), 'r', 'utf-8') as file_handle:
-            self.config = json.load(file_handle)
-        
+        if os.path.exists(self.get_exe_path('./config.json')):
+            with codecs.open(self.get_exe_path('./config.json'), 'r', 'utf-8') as file_handle:
+                self.config = json.load(file_handle)
+
     @staticmethod
     def execute_shell_command(args, wait=True):
         """
@@ -141,9 +143,14 @@ class MainClass(object):
             exit(-1)
         self.enter_cwd_dir = os.getcwd()
         self.python_file_dir = os.path.dirname(sys.argv[0])
-        self.__init_data__()
-        self.work()
-    
+        try:
+            self.__init_data__()
+            self.work()
+        except Exception as e:
+            self.logger.error('Exception:')
+            self.logger.error(e)
+            self.logger.error(traceback.format_exc())
+
     def work(self):
         """
         实际工作逻辑
