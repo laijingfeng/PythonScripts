@@ -1,6 +1,6 @@
 # !/usr/bin/python
 # encoding=utf-8
-# version: 2018-10-10 10:06:28
+# version: 2018-10-15 14:39:53
 """
 工具模板
 """
@@ -150,6 +150,10 @@ class MainClass(object):
             self.logger.error('Exception:')
             self.logger.error(e)
             self.logger.error(traceback.format_exc())
+            # 输出到控制台，方便编辑器调试
+            print 'Exception:'
+            print e
+            print traceback.format_exc()
 
     def work(self):
         """
