@@ -1,12 +1,13 @@
 # !/usr/bin/python
 # encoding=utf-8
-# version: 2018-08-20 10:34:17
+# version: 2018-11-02 21:08:14
 """
 一些常用小功能
 """
 
 import sys
 import os
+import stat
 import shutil
 
 class JerryUtil(object):
@@ -17,14 +18,20 @@ class JerryUtil(object):
     @staticmethod
     def remove_file_or_dir(path):
         """
-        删除文件或者目录
+        删除文件或者目录，支持SVN目录
         """
         if os.path.exists(path) is False:
             return
         if os.path.isfile(path):
+            # 修改可写
+            os.chmod(path, stat.S_IWRITE)
             os.remove(path)
         else:
-            shutil.rmtree(path, True)
+            # 删除子文件夹
+            for f in os.listdir(path):
+                sf = os.path.join(path, f)
+                JerryUtil.remove_file_or_dir(sf)
+            shutil.rmtree(path, True, False)
     
     @staticmethod
     def copy_dir(src, des):
