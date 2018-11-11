@@ -1,6 +1,6 @@
 # !/usr/bin/python
 # encoding=utf-8
-# version: 2018-10-15 14:39:53
+# version: 2018-11-11 23:54:34
 """
 工具模板
 """
@@ -11,7 +11,7 @@ import json
 import codecs
 import traceback
 import subprocess
-sys.path.append(os.path.join(os.path.dirname(sys.argv[0]), '../'))
+sys.path.append(os.path.join(os.path.dirname(sys.argv[0]), './../'))
 from logger import Logger
 
 class ExeRsp(object):
@@ -32,11 +32,14 @@ class MainClass(object):
         """
         self.enter_cwd_dir = ''  # 执行路径
         self.python_file_dir = ''  # python文件路径
-        self.argv = {}  # 参数，文件名参考：template^k1-v1^k2-v2.py
-        self.config = {}  # 配置
 
+        self.argv = {}  # 参数，文件名参数，参考：template^k1-v1^k2-v2.py
+        
         self.log_path = './work'  # 日志文件名
         self.logger = ''  # 日志工具
+
+        self.config_path = './config.json'  # 配置路径
+        self.config = {}  # 配置
 
     def parse_argv(self):
         """
@@ -83,8 +86,8 @@ class MainClass(object):
         self.logger = Logger(Logger.LEVEL_INFO, self.get_exe_path(self.log_path))
         self.logger.reset()
 
-        if os.path.exists(self.get_exe_path('./config.json')):
-            with codecs.open(self.get_exe_path('./config.json'), 'r', 'utf-8') as file_handle:
+        if os.path.exists(self.get_exe_path(self.config_path)):
+            with codecs.open(self.get_exe_path(self.config_path), 'r', 'utf-8') as file_handle:
                 self.config = json.load(file_handle)
 
     @staticmethod
