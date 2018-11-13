@@ -1,6 +1,6 @@
 # !/usr/bin/python
 # encoding=utf-8
-# version: 2018-11-11 23:54:34
+# version: 2018-11-13 15:45:00
 """
 工具模板
 """
@@ -36,6 +36,7 @@ class MainClass(object):
         self.argv = {}  # 参数，文件名参数，参考：template^k1-v1^k2-v2.py
         
         self.log_path = './work'  # 日志文件名
+        self.log_to_screen = False  # 日志是否输出到屏幕
         self.logger = ''  # 日志工具
 
         self.config_path = './config.json'  # 配置路径
@@ -76,14 +77,19 @@ class MainClass(object):
         """
         使用说明，参数不对的时候会提示
         """
-        print 'this is usage()'
+        usage_info = '{}\n{}\n{}\n{}\n{}\n{}'.format(
+            '==================== usage ====================',
+            'this is the usage',
+            '================================================'
+        )
+        self.logger.info(usage_info)
     
     def __init_data__(self):
         """
         初始化数据，解析参数之后
         """
         # 日志工具放前面，这个要尽量成功构建
-        self.logger = Logger(Logger.LEVEL_INFO, self.get_exe_path(self.log_path))
+        self.logger = Logger(Logger.LEVEL_INFO, self.get_exe_path(self.log_path), self.log_to_screen)
         self.logger.reset()
 
         if os.path.exists(self.get_exe_path(self.config_path)):
@@ -150,13 +156,8 @@ class MainClass(object):
             self.__init_data__()
             self.work()
         except Exception as e:
-            self.logger.error('Exception:')
-            self.logger.error(e)
-            self.logger.error(traceback.format_exc())
-            # 输出到控制台，方便编辑器调试
-            print 'Exception:'
-            print e
-            print traceback.format_exc()
+            error_info = '捕获异常：如果上面有错误日志，先看错误日志\n异常内容:{}\n异常堆栈:\n{}'.format(e, traceback.format_exc())
+            self.logger.error(error_info)
 
     def work(self):
         """

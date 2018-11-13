@@ -1,6 +1,6 @@
 # !/usr/bin/python
 # encoding=utf-8
-# version: 2018-11-02 21:08:14
+# version: 2018-11-13 15:15:00
 """
 一些常用小功能
 """
@@ -34,6 +34,24 @@ class JerryUtil(object):
             shutil.rmtree(path, True, False)
     
     @staticmethod
+    def delete_pattern_file(path, pattern1, pattern2=''):
+        """
+        删除某个目录下符合pattern特征的文件\n
+        不递归
+        """
+        file_list = os.listdir(path)
+        for line in file_list:
+            file_path = os.path.join(path, line)
+            if os.path.isdir(file_path):
+                continue
+            if line.find(pattern1) != -1:
+                if pattern2 != '':
+                    if line.find(pattern2) != -1:
+                        os.remove(file_path)
+                else:
+                    os.remove(file_path)
+
+    @staticmethod
     def copy_dir(src, des):
         """
         拷贝目录
@@ -49,3 +67,15 @@ class JerryUtil(object):
                 shutil.copy(src1, des1) 
             if os.path.isdir(src1):
                 JerryUtil.copy_dir(src1, des1)
+    
+    @staticmethod
+    def get_caller_info():
+        """
+        获取调用者的信息\n
+        文件名，函数名，行号
+        """
+        try:
+            raise Exception
+        except:
+            f = sys.exc_info()[2].tb_frame.f_back
+        return (os.path.basename(f.f_code.co_filename), f.f_code.co_name, f.f_lineno)

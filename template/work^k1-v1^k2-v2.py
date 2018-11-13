@@ -1,6 +1,6 @@
 # !/usr/bin/python
 # encoding=utf-8
-# version: 2018-11-11 23:54:34
+# version: 2018-11-13 15:45:00
 """
 模版
 """
@@ -15,6 +15,8 @@ class WorkClass(MainClass):
 
         # 根据需要重新指定配置文件的路径
         self.log_path = './work'  # 日志文件名
+        self.log_to_screen = True
+
         self.config_path = './config.json'  # 配置路径
     
     def work(self):
@@ -22,6 +24,8 @@ class WorkClass(MainClass):
         实际工作逻辑\n
         覆盖父类
         """
+        # TODO 检查参数
+
         self.logger.info('==WorkClass开始==')
         
         # TODO...
