@@ -1,6 +1,6 @@
 # !/usr/bin/python
 # encoding=utf-8
-# version: 2018-08-27 17:46:55
+# version: 2018-11-28
 """
 图片缩放
 """
@@ -15,12 +15,12 @@ def process_image(filename):
     
     image = Image.open(filename)
     w, h = image.size
-    scale = 0.6
+    scale = 0.7
     new_im = image.resize((int(w * scale), int(h * scale)), Image.ANTIALIAS)     
     new_im.save(new_dir + filename)
 
 if __name__ == '__main__':
-    path = './'
+    path = './old/'
     list = os.listdir(path)
     for line in list:
         file_path = os.path.join(path, line)
