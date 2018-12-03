@@ -1,6 +1,6 @@
 # !/usr/bin/python
 # encoding=utf-8
-# version: 2018-11-28
+# version: 2018-12-03
 """
 图片缩放
 """
@@ -8,15 +8,28 @@
 import os
 from PIL import Image
 
-def process_image(filename):
+def process_image(filepath, filename):
     new_dir = './new/'
     if os.path.exists(new_dir) is False:
         os.makedirs(new_dir)
     
-    image = Image.open(filename)
+    image = Image.open(filepath)
     w, h = image.size
-    scale = 0.7
-    new_im = image.resize((int(w * scale), int(h * scale)), Image.ANTIALIAS)     
+
+    # 缩放比例
+    scale = 0.5
+    nw = int(w * scale)
+    nh = int(h * scale)
+    
+    # 4的倍数
+    wmod = nw % 4
+    if wmod != 0:
+        nw = nw + 4 - wmod
+    hmod = nh % 4
+    if hmod != 0:
+        nh = nh + 4 - hmod
+    
+    new_im = image.resize((nw, nh), Image.ANTIALIAS)     
     new_im.save(new_dir + filename)
 
 if __name__ == '__main__':
@@ -27,4 +40,4 @@ if __name__ == '__main__':
         if os.path.isdir(file_path):
             continue
         if line.endswith('.png'):
-            process_image(line)
+            process_image(file_path, line)
