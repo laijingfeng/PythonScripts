@@ -17,17 +17,20 @@ def process_image(filepath, filename):
     w, h = image.size
 
     # 缩放比例
-    scale = 0.5
+    scale = 0.7
+    # 4的倍数
+    need_4_scale = True
+
     nw = int(w * scale)
     nh = int(h * scale)
     
-    # 4的倍数
-    wmod = nw % 4
-    if wmod != 0:
-        nw = nw + 4 - wmod
-    hmod = nh % 4
-    if hmod != 0:
-        nh = nh + 4 - hmod
+    if need_4_scale is True:
+        wmod = nw % 4
+        if wmod != 0:
+            nw = nw + 4 - wmod
+        hmod = nh % 4
+        if hmod != 0:
+            nh = nh + 4 - hmod
     
     new_im = image.resize((nw, nh), Image.ANTIALIAS)     
     new_im.save(new_dir + filename)
