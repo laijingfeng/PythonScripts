@@ -12,7 +12,7 @@ from PIL import Image
 enter_cwd_dir = ''
 python_file_dir = ''
 
-def get_exe_path(self, simple_path):
+def get_exe_path(simple_path):
     """
     相对路径转绝对路径
     """
@@ -31,13 +31,13 @@ def process_image(filepath, filename):
     # 缩放比例
     scale = 0.7
     # 4的倍数
-    need_4_scale = True
+    need_4_scale = False
 
     nw = int(w * scale)
     nh = int(h * scale)
 
-    # nw = 82
-    # nh = 82
+    nw = 82
+    nh = 82
     
     if need_4_scale is True:
         wmod = nw % 4
