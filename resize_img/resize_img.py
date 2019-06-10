@@ -1,15 +1,27 @@
 # !/usr/bin/python
 # encoding=utf-8
-# version: 2018-12-03
+# version: 2019-06-10
 """
 图片缩放
 """
 
+import sys
 import os
 from PIL import Image
 
+enter_cwd_dir = ''
+python_file_dir = ''
+
+def get_exe_path(self, simple_path):
+    """
+    相对路径转绝对路径
+    """
+    global enter_cwd_dir
+    global python_file_dir
+    return os.path.join(enter_cwd_dir, python_file_dir, simple_path)
+
 def process_image(filepath, filename):
-    new_dir = './new/'
+    new_dir = get_exe_path('./new/')
     if os.path.exists(new_dir) is False:
         os.makedirs(new_dir)
     
@@ -23,6 +35,9 @@ def process_image(filepath, filename):
 
     nw = int(w * scale)
     nh = int(h * scale)
+
+    # nw = 82
+    # nh = 82
     
     if need_4_scale is True:
         wmod = nw % 4
@@ -36,7 +51,12 @@ def process_image(filepath, filename):
     new_im.save(new_dir + filename)
 
 if __name__ == '__main__':
-    path = './old/'
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
+    enter_cwd_dir = os.getcwd()
+    python_file_dir = os.path.dirname(sys.argv[0])
+    
+    path = get_exe_path('./old/')
     list = os.listdir(path)
     for line in list:
         file_path = os.path.join(path, line)
