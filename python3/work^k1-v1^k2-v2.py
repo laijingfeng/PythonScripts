@@ -6,9 +6,11 @@
 
 import sys
 import os
+import wx # gui
+from main_frame_ui import MainFrameUI # gui
 from main_class import MainClass
 
-class WorkClass(MainClass):
+class WorkClass(MainClass, MainFrameUI):
     """
     工作类
     """
@@ -17,6 +19,7 @@ class WorkClass(MainClass):
         初始化
         """
         MainClass.__init__(self)
+        MainFrameUI.__init__(self, None) # gui
 
         # 根据需要重新指定配置文件的路径
         self.log_path = './work'  # 日志文件名
@@ -40,7 +43,16 @@ class WorkClass(MainClass):
             print('self.argv[{}] = {}'.format(key, self.argv[key]))
 
         self.logger.info('==WorkClass完成==')
+    
+    def onClickMy(self, event):
+        """
+        重写MainFrameUI的点击事件
+        """
+        self.logger.info('onClickMy')
 
 if __name__ == '__main__':
+    app = wx.App(False) # gui
     WORK_CLASS = WorkClass()
     WORK_CLASS.run()
+    WORK_CLASS.Show(True) # gui
+    app.MainLoop() # gui
