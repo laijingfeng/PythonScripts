@@ -6,6 +6,7 @@
 
 import sys
 import os
+import codecs
 from main_class import MainClass
 
 class WorkClass(MainClass):
@@ -38,6 +39,12 @@ class WorkClass(MainClass):
             print('self.config[{}] = {}'.format(key, self.config[key]))
         for key in self.argv.keys():
             print('self.argv[{}] = {}'.format(key, self.argv[key]))
+
+        with codecs.open(self.get_exe_path(os.path.join(self.config['project_root'], './set.svnprops')), 'rb', 'utf-8') as file_handle:
+            read_data = file_handle.read()
+            read_data_bytes = read_data.encode('utf-8')
+            for d in read_data_bytes:
+                print(d)
 
         self.logger.info('==WorkClass完成==')
 

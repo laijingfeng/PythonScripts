@@ -6,5 +6,8 @@
 	"test_age_des": "int type",
 	
 	"test_good": true,
-	"test_good_des": "bool type"
+	"test_good_des": "bool type",
+
+	"project_root": "D:/Projects/LocalSvn/UnityTest",
+	"project_root_des": "project root directory, use to set packages externals"
 }
